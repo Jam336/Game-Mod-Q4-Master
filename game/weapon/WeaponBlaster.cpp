@@ -387,6 +387,9 @@ stateResult_t rvWeaponBlaster::State_Charged ( const stateParms_t& parms ) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
 			}
+			Attack(true, 1, spread, 0, 1.0f);
+			PlayEffect("fx_chargedflash", barrelJointView, false);
+			PlayAnim(ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames);
 			return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;

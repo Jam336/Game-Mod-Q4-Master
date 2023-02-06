@@ -125,9 +125,41 @@ public:
 	idLinkList<idActor>		enemyNode;			// node linked into an entity's enemy list for quick lookups of who is attacking him
 	idLinkList<idActor>		enemyList;			// list of characters that have targeted the player as their enemy
 
+	//Start Jade's Code
+
+
+	//RPG systems
+	int						maxHP;	//max HP of an actor
+	int						lvl;	//lvl of an actor (used for XP calc?)
+	int						ATK;	//determines base damadge for weapons
+	int						DEF;	//determines base damadge taken
+	int						SPD;	//determines dodge chance? Possibly scrap SPD
+
+	//Equipment
+	int						BasicEquiped;
+	int						ArmorEquiped;
+	int						HeavyEquiped;
+
+
+
+
+	//End Jade's Code
 public:
 							idActor( void );
 	virtual					~idActor( void );
+
+	//Jade code
+	//virtual int				fireWeapon(void);
+
+	//returns for loadout pieces
+	virtual int				getBasic(void);
+	virtual int				getArmor(void);
+	virtual int				getHeavy(void);
+
+	void setLoadout(idActor* A, int b, int a, int h);
+
+
+	//End Jade code
 
 	void					Spawn( void );
 	virtual void			Restart( void );

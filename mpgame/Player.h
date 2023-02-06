@@ -1140,6 +1140,8 @@ private:
 	stateResult_t			State_Legs_Dead					( const stateParms_t& parms );
 	
  	CLASS_STATES_PROTOTYPE( idPlayer );
+	void printRPGPlayer(const idCmdArgs& args);
+	void setLoadout(int b, int h, int a);
 };
 
 ID_INLINE bool idPlayer::IsBeingTalkedTo( void ) {

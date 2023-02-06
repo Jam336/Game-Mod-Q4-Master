@@ -1071,6 +1071,56 @@ bool idInventory::UseAmmo( int index, int amount ) {
 	return true;
 }
 
+
+
+//Jades player funct
+
+void idPlayer::printRPGPlayer(const idCmdArgs &args) //Should print custom RPG stuff
+{
+	idPlayer *player = gameLocal.GetLocalPlayer();
+
+	if (player == 0)
+	{
+		return;
+	}
+
+
+	gameLocal.Printf("Testy Testy! Here's some info! %f, %f, %f\n", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped);
+}
+
+void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in debug for now
+{
+
+	idPlayer* player = gameLocal.GetLocalPlayer();
+
+	if (player == 0)
+	{
+		return;
+	}
+	if (args.Argv(3) == "")
+	{
+		gameLocal.Printf("Vars needed! use form 'set_PL_Loadout [basic] [armor] [heavy]");
+		return;
+	}
+	int b = 1;
+	int a = 2;
+	int h = 3;
+
+
+	player->setLoadout(player, b, a, h);
+
+
+
+
+
+	return;
+}
+
+
+
+
+
+
 /*
 ==============
 idPlayer::idPlayer
@@ -1078,6 +1128,19 @@ idPlayer::idPlayer
 */
 idPlayer::idPlayer() {
 	memset( &usercmd, 0, sizeof( usercmd ) );
+
+	//Jade time!!!
+
+	BasicEquiped = 0;
+	ArmorEquiped = 3;
+	HeavyEquiped = 0;
+
+
+
+
+
+
+	//End jade time :pensive:
 
 	alreadyDidTeamAnnouncerSound = false;
 

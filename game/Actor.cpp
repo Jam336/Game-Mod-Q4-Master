@@ -508,6 +508,45 @@ idActor::~idActor( void ) {
 	ShutdownThreads();
 }
 
+
+
+
+//Jade's super cool actor functions!!!
+int idActor::getBasic(void)
+{
+	return 0;
+}
+
+int idActor::getArmor(void)
+{
+	return 0;
+}
+
+int idActor::getHeavy(void)
+{
+	return 0;
+}
+
+
+
+void idActor::setLoadout(idActor *A,int b, int a, int h)
+{
+	if (A == 0)
+	{
+		return;
+	}
+	//Need to make A a pointer, god save me
+
+
+	//TODO WRITE BETTER CODE
+	A->BasicEquiped = b;
+	A->ArmorEquiped = a;
+	A->HeavyEquiped = h;
+
+}
+
+//God these are all going to make me suffer
+
 /*
 =====================
 idActor::Spawn

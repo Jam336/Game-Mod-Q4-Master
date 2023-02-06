@@ -3053,6 +3053,14 @@ void idGameLocal::InitConsoleCommands( void ) {
 //	cmdSystem->AddCommand( "writeGameState",		WriteGameState_f,			CMD_FL_GAME,				"write game state" );
 //	cmdSystem->AddCommand( "testSaveGame",			TestSaveGame_f,				CMD_FL_GAME|CMD_FL_CHEAT,	"test a save game for a level" );
 // RAVEN END
+
+	//Jade's Super special commands!!!!
+
+	cmdSystem->AddCommand("player_Loadout", idPlayer::printRPGPlayer, CMD_FL_GAME, "[RPGSYSTEM] displays the player's loadout variables"); //TODO WRITE A PROPER THING
+	cmdSystem->AddCommand("set_PL_Loadout", idPlayer::setPlayerLoadout, CMD_FL_GAME, "[RPGSYSTEM] displays the player's loadout variables");
+
+	//End Jade's super cool commands
+
 	cmdSystem->AddCommand( "game_memory",			idClass::DisplayInfo_f,		CMD_FL_GAME,				"displays game class info" );
 	cmdSystem->AddCommand( "listClasses",			idClass::ListClasses_f,		CMD_FL_GAME,				"lists game classes" );
 	cmdSystem->AddCommand( "listThreads",			idThread::ListThreads_f,	CMD_FL_GAME|CMD_FL_CHEAT,	"lists script threads" );

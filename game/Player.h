@@ -280,6 +280,16 @@ public:
  		EVENT_MAXEVENTS
  	};
 
+	//Jade's super cools stuff!!!
+
+
+	int	xp;
+
+
+
+
+	//End jad'es cookl stuff :3
+
 	friend class idThread;
 
 	usercmd_t				usercmd;
@@ -427,6 +437,16 @@ public:
 
 public:
 	CLASS_PROTOTYPE( idPlayer );
+
+	//Jades super cool player functions!!!!
+
+	static void idPlayer::printRPGPlayer(const idCmdArgs &args);
+
+	static void idPlayer::setPlayerLoadout(const idCmdArgs& args);
+
+
+
+	//End the super cool player functions
 
 							idPlayer();
 	virtual					~idPlayer();

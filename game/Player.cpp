@@ -26,6 +26,7 @@
 // nrausch: support for direct button input
 #include "../sys/xenon/xen_input.h"
 #endif
+#include "../RPG.h"
 // RAVEN END
 
 
@@ -1085,7 +1086,17 @@ void idPlayer::printRPGPlayer(const idCmdArgs &args) //Should print custom RPG s
 	}
 
 
-	gameLocal.Printf("Testy Testy! Here's some info! %f, %f, %f\n", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped);
+
+
+	gameLocal.Printf("Testy Testy! Here's some info! Basic: %u, Armor: %u, Heavy: %u, Current HP %u\n", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped, player->HP);
+
+	hurt(player, 5);
+
+	gameLocal.Printf("Testy! I did DMG! %u", player->HP);
+
+
+
+
 }
 
 void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in debug for now
@@ -1105,6 +1116,7 @@ void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in 
 	int b = 1;
 	int a = 2;
 	int h = 3;
+	
 
 
 	player->setLoadout(player, b, a, h);
@@ -1134,6 +1146,14 @@ idPlayer::idPlayer() {
 	BasicEquiped = 0;
 	ArmorEquiped = 3;
 	HeavyEquiped = 0;
+
+	maxHP = 100;
+	HP = 100;
+
+	ATK = 5;
+	DEF = 10;
+	SPD = 15;
+
 
 
 

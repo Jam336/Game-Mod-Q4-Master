@@ -130,6 +130,7 @@ public:
 
 	//RPG systems
 	int						maxHP;	//max HP of an actor
+	int						HP;		//RPG Health of an actor
 	int						lvl;	//lvl of an actor (used for XP calc?)
 	int						ATK;	//determines base damadge for weapons
 	int						DEF;	//determines base damadge taken
@@ -152,12 +153,17 @@ public:
 	//virtual int				fireWeapon(void);
 
 	//returns for loadout pieces
-	virtual int				getBasic(void);
-	virtual int				getArmor(void);
-	virtual int				getHeavy(void);
+	virtual int				getBasic(idActor*);
+	virtual int				getArmor(idActor*);
+	virtual int				getHeavy(idActor*);
 
 	void setLoadout(idActor* A, int b, int a, int h);
 
+
+	//void attack(idActor*); //the function called when an actor/player attacks another actor/player
+	//void hurt(int); //the function called when an actor/player takes damadge
+	//void item(int); //the function called when an actor uses an item
+	//Note for Jade: SEE RPG.H AND RPG.CPP
 
 	//End Jade code
 

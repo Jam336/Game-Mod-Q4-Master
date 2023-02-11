@@ -512,19 +512,35 @@ idActor::~idActor( void ) {
 
 
 //Jade's super cool actor functions!!!
-int idActor::getBasic(void)
+int idActor::getBasic(idActor* A)
 {
-	return 0;
+	if (A == 0)
+	{
+		return 0;
+	}
+
+	return A->BasicEquiped;
+	
 }
 
-int idActor::getArmor(void)
+int idActor::getArmor(idActor* A)
 {
-	return 0;
+	if (A == 0)
+	{
+		return 0;
+	}
+
+	return A->ArmorEquiped;
 }
 
-int idActor::getHeavy(void)
+int idActor::getHeavy(idActor* A)
 {
-	return 0;
+	if (A == 0)
+	{
+		return 0;
+	}
+
+	return A->HeavyEquiped;
 }
 
 

@@ -561,6 +561,21 @@ void idActor::setLoadout(idActor *A,int b, int a, int h)
 
 }
 
+void idActor::setStats(idActor* A, int HP, int atk, int def, int spd)
+{
+	if (A == 0)
+	{
+		return;
+	}
+
+	A->maxHP = HP;
+	A->ATK = atk;
+	A->DEF = def;
+	A->SPD = spd;
+
+
+}
+
 //God these are all going to make me suffer
 
 /*

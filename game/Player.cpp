@@ -1092,7 +1092,13 @@ void idPlayer::printRPGPlayer(const idCmdArgs &args) //Should print custom RPG s
 
 	hurt(player, 5);
 
-	gameLocal.Printf("Testy! I did DMG! %u", player->HP);
+	gameLocal.Printf("Testy! I did DMG! %u\n", player->HP);
+
+	//gameLocal.Printf("Calling RPG.cpp\n");
+
+	//Machine();
+
+
 
 
 
@@ -1113,14 +1119,15 @@ void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in 
 		gameLocal.Printf("Vars needed! use form 'set_PL_Loadout [basic] [armor] [heavy]");
 		return;
 	}
-	int b = 1;
-	int a = 2;
-	int h = 3;
+	int b = atoi(args.Argv(1));
+	int a = atoi(args.Argv(2));
+	int h = atoi(args.Argv(3));
 	
-
+	gameLocal.Printf("chaning Loadout... %u, %u, %u", player->getBasic(player), player->getArmor(player), player->getHeavy(player));
 
 	player->setLoadout(player, b, a, h);
 
+	gameLocal.Printf("-> %u, %u, %u\n ", player->getBasic(player), player->getArmor(player), player->getHeavy(player));
 
 
 

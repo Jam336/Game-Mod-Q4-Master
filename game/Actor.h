@@ -159,10 +159,11 @@ public:
 
 	void setLoadout(idActor* A, int b, int a, int h);
 
+	void setStats(idActor*, int HP, int ATK, int DEF, int SPD);
 
-	//void attack(idActor*); //the function called when an actor/player attacks another actor/player
-	//void hurt(int); //the function called when an actor/player takes damadge
-	//void item(int); //the function called when an actor uses an item
+
+
+
 	//Note for Jade: SEE RPG.H AND RPG.CPP
 
 	//End Jade code

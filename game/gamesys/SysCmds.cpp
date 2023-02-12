@@ -30,6 +30,7 @@
 #else
 #include "NoGameTypeInfo.h"
 #endif
+#include "../../RPG.h"
 
 /*
 ==================
@@ -3058,6 +3059,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 
 	cmdSystem->AddCommand("player_Loadout", idPlayer::printRPGPlayer, CMD_FL_GAME, "[RPGSYSTEM] displays the player's loadout variables"); //TODO WRITE A PROPER THING
 	cmdSystem->AddCommand("set_PL_Loadout", idPlayer::setPlayerLoadout, CMD_FL_GAME, "[RPGSYSTEM] displays the player's loadout variables");
+	//cmdSystem->AddCommand("machine", Machine, CMD_FL_GAME, "[RPGSYSTEM] calls the state machine");
 
 	//End Jade's super cool commands
 

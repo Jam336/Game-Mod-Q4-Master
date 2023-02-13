@@ -6,7 +6,7 @@
 
 
 #include "RPG.h"
-#include "game/Actor.h"
+#include "Actor.h"
 
 
 

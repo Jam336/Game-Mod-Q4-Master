@@ -30,7 +30,7 @@
 #else
 #include "NoGameTypeInfo.h"
 #endif
-#include "../../RPG.h"
+#include "../RPG.h"
 
 /*
 ==================

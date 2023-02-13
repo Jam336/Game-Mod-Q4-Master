@@ -6,7 +6,7 @@
 
 
 #pragma once
-#include "game/Actor.h"
+#include "Actor.h"
 
 
 void hurt(idActor*,int); //an actor is hurt! deals damadge to their HP

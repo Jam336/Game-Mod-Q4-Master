@@ -26,7 +26,7 @@
 // nrausch: support for direct button input
 #include "../sys/xenon/xen_input.h"
 #endif
-#include "../RPG.h"
+#include "RPG.h"
 // RAVEN END
 
 

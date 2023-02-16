@@ -9,6 +9,12 @@
 #include "Actor.h"
 
 
+//idUserInterfaceManager* uiManager;
+
+
+
+
+
 void hurt(idActor*,int); //an actor is hurt! deals damadge to their HP
 
 void attackBasic(idActor* attacker, idActor* defender); //an Actor Attacks! Determines how hurt a defender is, and calls hurt() as needed
@@ -18,6 +24,10 @@ void attackHeavy(idActor* attacker, idActor* defender); //an Actor Attacks! Dete
 void special(idActor* attacker, idActor* defender, int Case); //While mainly item usage, this could also be used for boss events
 
 bool validItem(int i); //checks if a given item is valid
+
+bool xpThresh();
+
+void levelUp();
 
 
 enum PhaseMachine {START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE, FLEE, DEF_ACT, END, DEFEAT };

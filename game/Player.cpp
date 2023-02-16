@@ -1136,6 +1136,11 @@ void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in 
 }
 
 
+void idPlayer::MachineCall(const idCmdArgs& args)
+{
+	Machine();
+}
+
 
 
 
@@ -1160,6 +1165,8 @@ idPlayer::idPlayer() {
 	ATK = 5;
 	DEF = 10;
 	SPD = 15;
+
+	xp = 100;
 
 
 

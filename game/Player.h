@@ -444,6 +444,8 @@ public:
 
 	static void idPlayer::setPlayerLoadout(const idCmdArgs& args);
 
+	static void idPlayer::MachineCall(const idCmdArgs& args);
+
 
 
 	//End the super cool player functions

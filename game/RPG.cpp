@@ -9,6 +9,7 @@
 #include "Actor.h"
 
 
+//idUserInterfaceManager* uiManager = NULL;
 
 
 void hurt(idActor* A, int dmg)
@@ -90,6 +91,52 @@ void special(idActor* attacker, idActor* defender, int Case)
 }
 
 
+
+void RPGMenu()
+{
+	uiManager->ListGuis();
+}
+
+
+
+bool xpThresh()
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player == 0)
+	{
+		return false;
+	}
+
+	if (player->xp >= 100)
+	{
+		return true;
+	}
+
+
+
+	return false;
+}
+
+void levelUp()
+{
+
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player == 0)
+	{
+		return;
+	}
+
+	player->xp -= 100;
+	player->ATK +=5;
+	player->DEF +=5;
+	player->SPD +=5;
+	player->maxHP += 25;
+
+	gameLocal.Printf("Leveled Up!");
+
+
+	return;
+}
 
 void Machine()
 {
@@ -206,6 +253,14 @@ void Machine()
 
 		case END:
 			gameLocal.Printf("GLORIOUS END!\n");
+			player->xp += 5;
+			while (xpThresh())
+			{
+				levelUp();
+			}
+
+
+
 			return;
 
 

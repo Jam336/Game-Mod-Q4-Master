@@ -9,6 +9,9 @@
 #include "Actor.h"
 
 
+
+
+
 //idUserInterfaceManager* uiManager = NULL;
 
 
@@ -27,6 +30,59 @@ void hurt(idActor* A, int dmg)
 	
 
 }
+
+
+void attack(idActor* attacker, bool basic, idActor* defender) //dmg is calculated as ATK*Weapon - DEF*Armor
+{
+	if (attacker == 0 || defender == 0)
+	{
+		return;
+	}
+
+
+
+	int atk = attacker->ATK;
+	if(attacker->lastUsed == ArmorPiercingBullets)
+	{
+		atk += 10;
+	}
+	
+	int def = defender->DEF;
+	if(defender->lastUsed == PortableCover)
+	{
+		def += 10;
+	}
+
+
+	int dmg; 
+	if (basic) //because I ma bad at writing code, I have to use a bool for if we're using a basic or not
+	{
+		dmg == atk * calcDmg(attacker->BasicEquiped);
+	}
+	else 
+	{
+		dmg = atk * calcDmg(attacker->HeavyEquiped);
+	}
+
+	
+	//I suffer
+	def = def * calcDefVal(defender->ArmorEquiped);
+
+	
+	//Only runs if dmg-def is greater than 0
+	if (dmg - def > 0)
+	{
+		hurt(defender, dmg);
+	}
+	
+
+	
+
+
+}
+
+
+
 
 void attackBasic(idActor* attacker, idActor* defender)
 {
@@ -164,9 +220,9 @@ void Machine()
 	gameLocal.Printf("Player Loadout: %u, %u, %u, HP: %u", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped, player->HP);
 	gameLocal.Printf("Enemy Loadout: %u, %u, %u, HP: %u", enemy->BasicEquiped, enemy->ArmorEquiped, enemy->HeavyEquiped, enemy->HP);
 
-	bool attack, defend, item, basic, heavy;
+	bool attacking, defend, item, basic, heavy;
 
-	attack = true;
+	attacking = true;
 
 	heavy = true;
 
@@ -186,7 +242,7 @@ void Machine()
 
 			//TODO, REPLACE THESE IFS WITH PROPER EVENT UI HANDLING
 
-			if (attack)
+			if (attacking)
 			{
 				phase = ATK_MENU;
 			}
@@ -217,14 +273,12 @@ void Machine()
 
 			if (basic)
 			{
-				attackBasic(player, enemy);
+				attack(player, true,enemy);
 			}
 			else if (heavy)
 			{
-				attackHeavy(player, enemy);
+				attack(player, false, enemy);
 			}
-
-			
 			gameLocal.Printf("Enemy HP: %u", enemy->HP);
 			phase = DEF_ACT;
 			continue;

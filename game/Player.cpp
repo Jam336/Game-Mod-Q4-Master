@@ -27,6 +27,7 @@
 #include "../sys/xenon/xen_input.h"
 #endif
 #include "RPG.h"
+#include "Equipment.h"
 // RAVEN END
 
 
@@ -1155,9 +1156,9 @@ idPlayer::idPlayer() {
 
 	//Jade time!!!
 
-	BasicEquiped = 0;
-	ArmorEquiped = 3;
-	HeavyEquiped = 0;
+	BasicEquiped = Blaster;
+	ArmorEquiped = Helmet;
+	HeavyEquiped = Rocket;
 
 	maxHP = 100;
 	HP = 100;

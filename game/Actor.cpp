@@ -555,9 +555,9 @@ void idActor::setLoadout(idActor *A,int b, int a, int h)
 
 
 	//TODO WRITE BETTER CODE
-	A->BasicEquiped = b;
-	A->ArmorEquiped = a;
-	A->HeavyEquiped = h;
+	A->BasicEquiped = intToWep(b);
+	A->ArmorEquiped = intToArm(a);
+	A->HeavyEquiped = intToWep(h);
 
 }
 

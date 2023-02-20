@@ -8,26 +8,10 @@
 
 
 
-//
-int attack(wep w, arm a)
-{
-
-
-
-
-
-
-
-
-
-
-
-    return 0;
-}
-
-
 int calcDmg(wep w)
 {
+
+
 
     switch (w)
     {
@@ -75,13 +59,20 @@ int calcDmg(wep w)
 
 
 
-
-
-
-
-
-
 }
+
+int calcDefVal(arm a)
+{
+    //Writing code like this is gonna give me an anyuerism
+    return 0;
+}
+
+
+
+
+
+
+
 
 bool isBasic(wep w)
 {
@@ -104,6 +95,29 @@ bool isHeavy(wep w)
         return true;
     }
     return false;
+}
+
+wep intToWep(int)
+{
+    
+
+
+
+
+
+
+
+    return wep();
+}
+
+arm intToArm(int)
+{
+    return arm();
+}
+
+item intToItem(int)
+{
+    return item();
 }
 
 int blaster()
@@ -155,6 +169,9 @@ int lightning()
 {
     return 15;
 }
+
+
+
 
 void useItem(item i, idActor* A)
 {

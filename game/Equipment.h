@@ -15,13 +15,21 @@ enum arm { Helmet, Light, Medium, Heavy, God};
 enum item {MedKit, PortableCover, ArmorPiercingBullets, Grenade, BattlePowder};
 
 
-int attack(wep w, arm a);
+
 
 int calcDmg(wep w);
+
+int calcDefVal(arm a);
 
 bool isBasic(wep w);
 
 bool isHeavy(wep w);
+
+wep intToWep(int); 
+
+arm intToArm(int);
+
+item intToItem(int);
 
 
 

@@ -17,6 +17,8 @@
 
 void hurt(idActor*,int); //an actor is hurt! deals damadge to their HP
 
+void attack(idActor* attacker, bool basic, idActor* defender); //:3
+
 void attackBasic(idActor* attacker, idActor* defender); //an Actor Attacks! Determines how hurt a defender is, and calls hurt() as needed
 
 void attackHeavy(idActor* attacker, idActor* defender); //an Actor Attacks! Determines how hurt a defender is, and calls hurt() as needed

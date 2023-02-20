@@ -3,6 +3,7 @@
 //
 // MERGE_DATE 09/30/2004
 
+#include "Equipment.h"
 #ifndef __GAME_ACTOR_H__
 #define __GAME_ACTOR_H__
 
@@ -137,9 +138,11 @@ public:
 	int						SPD;	//determines dodge chance? Possibly scrap SPD
 
 	//Equipment
-	int						BasicEquiped;
-	int						ArmorEquiped;
-	int						HeavyEquiped;
+	wep BasicEquiped;
+	arm ArmorEquiped;
+	wep HeavyEquiped;
+
+	item lastUsed;
 
 
 

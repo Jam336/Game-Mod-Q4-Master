@@ -11,7 +11,7 @@
 
 //idUserInterfaceManager* uiManager;
 
-
+//idUserInterface* RPGUI;
 
 
 
@@ -33,6 +33,8 @@ void levelUp();
 
 
 enum PhaseMachine {START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE, FLEE, DEF_ACT, END, DEFEAT };
+
+enum Choice {ATTACK, DEFEND, ITEM}; //simple three choices
 
 void Machine();
 

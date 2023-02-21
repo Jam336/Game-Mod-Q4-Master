@@ -7,12 +7,10 @@
 
 #include "RPG.h"
 #include "Actor.h"
+#include "Game_Local.h"
 
 
 
-
-
-//idUserInterfaceManager* uiManager = NULL;
 
 
 void hurt(idActor* A, int dmg)
@@ -42,22 +40,36 @@ void attack(idActor* attacker, bool basic, idActor* defender) //dmg is calculate
 
 
 	int atk = attacker->ATK;
+	int atkSpd = attacker->SPD;
 	if(attacker->lastUsed == ArmorPiercingBullets)
 	{
 		atk += 10;
 	}
+
 	
+	if (attacker->lastUsed == BattlePowder)
+	{
+		atkSpd += 10;
+	}
+	
+
+	int defSpd = defender->SPD;
 	int def = defender->DEF;
 	if(defender->lastUsed == PortableCover)
 	{
 		def += 10;
 	}
 
+	if (defender->lastUsed == BattlePowder)
+	{
+		defSpd += 10;
+	}
 
-	int dmg; 
+
+	int dmg = 0; 
 	if (basic) //because I ma bad at writing code, I have to use a bool for if we're using a basic or not
 	{
-		dmg == atk * calcDmg(attacker->BasicEquiped);
+		dmg = atk * calcDmg(attacker->BasicEquiped);
 	}
 	else 
 	{
@@ -66,18 +78,18 @@ void attack(idActor* attacker, bool basic, idActor* defender) //dmg is calculate
 
 	
 	//I suffer
-	def = def * calcDefVal(defender->ArmorEquiped);
+	int defp = def * calcDefVal(defender->ArmorEquiped);
 
 	
 	//Only runs if dmg-def is greater than 0
-	if (dmg - def > 0)
+	if (dmg - defp > 0)
 	{
 		hurt(defender, dmg);
 	}
 	
 
 	
-
+	return;
 
 }
 
@@ -197,9 +209,14 @@ void levelUp()
 void Machine()
 {
 	PhaseMachine phase = START;
+	//RPGUI = NULL;
+	//RPGUI = uiManager->FindGui("guis/RPGMenu.gui"); //This should hopefully load the UI
 
 	idActor *enemy = new idActor();
 	idPlayer *player = gameLocal.GetLocalPlayer();
+	idActor *target = nullptr; //used for item usage
+
+
 
 	if (enemy == 0 || player == 0)
 	{
@@ -207,7 +224,7 @@ void Machine()
 	}
 
 
-	enemy->setLoadout(enemy, 2, 1, 3);
+	enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
 	enemy->setStats(enemy, 150, 1, 1, 1);
 
 
@@ -215,16 +232,19 @@ void Machine()
 	enemy->HP = enemy->maxHP;
 	player->HP = player->maxHP;
 
+
 	
 
 	gameLocal.Printf("Player Loadout: %u, %u, %u, HP: %u", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped, player->HP);
 	gameLocal.Printf("Enemy Loadout: %u, %u, %u, HP: %u", enemy->BasicEquiped, enemy->ArmorEquiped, enemy->HeavyEquiped, enemy->HP);
 
-	bool attacking, defend, item, basic, heavy;
-
-	attacking = true;
+	bool basic, heavy;
+	item i;
+	
 
 	heavy = true;
+
+	Choice c = ATTACK;
 
 
 	while (true)
@@ -242,20 +262,18 @@ void Machine()
 
 			//TODO, REPLACE THESE IFS WITH PROPER EVENT UI HANDLING
 
-			if (attacking)
+			switch(c)
 			{
+			case ATTACK:
 				phase = ATK_MENU;
-			}
-			else if (defend)
-			{
+				break;
+			case DEFEND:
 				phase = DEF_MENU;
-			}
-			else if (item)
-			{
+				break;
+			case ITEM:
 				phase = ITM_MENU;
+				break;
 			}
-
-
 
 			continue;
 		case ATK_MENU:
@@ -305,6 +323,28 @@ void Machine()
 			phase = END;
 			continue;
 
+		case ITM_MENU:
+
+			//I'll have some better code for how targeting works but for now, this is good enough
+
+
+
+			i = Grenade;
+			target = enemy;
+			
+			phase = ITM_USE;
+			continue;
+
+		case ITM_USE:
+
+			useItem(i, player, target);
+
+			phase = END;
+
+			continue;
+
+
+
 		case END:
 			gameLocal.Printf("GLORIOUS END!\n");
 			player->xp += 5;
@@ -313,11 +353,11 @@ void Machine()
 				levelUp();
 			}
 
-
-
 			return;
 
-
+		case DEFEAT:
+			gameLocal.Printf("EMBARASSING FAILURE\n");
+			return;
 
 
 
@@ -325,10 +365,6 @@ void Machine()
 			return;
 		}
 	}
-
-
-
-
 
 
 }

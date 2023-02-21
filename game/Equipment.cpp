@@ -54,6 +54,9 @@ int calcDmg(wep w)
     case Lightning:
         return(lightning());
         break;
+    case Enemy:
+        return 20;
+        break;
 
     }
 
@@ -63,106 +66,104 @@ int calcDmg(wep w)
 
 int calcDefVal(arm a)
 {
-    //Writing code like this is gonna give me an anyuerism
+    switch (a)
+    {
+    case Helmet:
+        return helmet();
+    case Light:
+        return light();
+    case Medium:
+        return medium();
+    case Heavy:
+        return heavy();
+    case God:
+        return god();
+    }
+            
+            //Writing code like this is gonna give me an anyuerism
     return 0;
 }
 
 
-
-
-
-
-
-
 bool isBasic(wep w)
 {
-    if (w < 5)
+    if (w <= 5 || w == Enemy)
     {
         return true;
     }
-
-
-
-
 
     return false;
 }
 
 bool isHeavy(wep w)
 {
-    if (w >= 5)
+    if (w > 5 && w != Enemy)
     {
         return true;
     }
     return false;
 }
 
-wep intToWep(int)
+wep intToWep(int i)
 {
-    
-
-
-
-
-
-
-
-    return wep();
+    return wep(i);
 }
 
-arm intToArm(int)
+arm intToArm(int i)
 {
-    return arm();
+   
+    return arm(i);
 }
 
-item intToItem(int)
+item intToItem(int i)
 {
-    return item();
+
+    return item(i);
 }
 
 int blaster()
 {
-    return 0;
+    return 1;
 }
 
 int machineGun()
 {
-    return 0;
+    return 2;
 }
 
 int shotGun()
 {
-    return 10;
+    return 2;
 }
 
 int nailGun()
 {
-    return 5;
+    return 1;
 }
 
 int gauntlet()
 {
-    return 15;
+    return 5;
 }
 
 int rocket()
 {
-    return 20;
+    return 5;
 }
 
 int mistake()
 {
-    return 30;
+    return 10;
 }
 
 int dark()
 {
-    return 25;
+    return 10;
 }
 
 int rail()
 {
-    return 40;
+    return 10;
 }
 
 int lightning()
@@ -170,24 +171,52 @@ int lightning()
     return 15;
 }
 
-
-
-
-void useItem(item i, idActor* A)
+int helmet()
 {
-    switch (i)
+    return 1;
+}
+
+int light()
+{
+    return 2;
+}
+
+int medium()
+{
+    return 4;
+}
+
+int heavy()
+{
+    return 6;
+}
+
+int god()
+{
+    return 10;
+}
+
+
+
+
+void useItem(item i, idActor* A, idActor* target)
+{
+
+    if (A == 0 || target == 0)
+    {
+        return;
+    }
+
+    A->lastUsed = i;
+
+
+    switch (i) //Armor Piercing and portable shield are covered in the Attack function!
     {
     case MedKit:
-        hurt(A, -20);
-        return;
-    case PortableCover:
-        //Something something, increase DEF
-        return;
-    case ArmorPiercingBullets:
-        //increase ATK
+        hurt(target, -20);
         return;
     case Grenade:
-        hurt(A, 30);
+        hurt(target, 30);
         return;
     case BattlePowder:
         //this is gonna be the hard one

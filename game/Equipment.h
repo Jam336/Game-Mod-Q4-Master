@@ -8,9 +8,9 @@
 #pragma once
 
 
-enum wep{Blaster,Machine_Gun,Shotgun,Nail_Gun,Gauntlet,Rocket,Mistake,Dark,Rail,Lightning};
+enum wep{Blaster,Machine_Gun,Shotgun,Nail_Gun,Gauntlet,Rocket,Mistake,Dark,Rail,Lightning, Enemy};
 
-enum arm { Helmet, Light, Medium, Heavy, God};
+enum arm {Helmet, Light, Medium, Heavy, God};
 
 enum item {MedKit, PortableCover, ArmorPiercingBullets, Grenade, BattlePowder};
 
@@ -54,7 +54,20 @@ int rail();
 
 int lightning();
 
-void useItem(item, idActor*);
+int helmet();
+
+int light();
+
+int medium();
+
+int heavy();
+
+int god();
+
+
+
+
+void useItem(item, idActor*, idActor*);
 
 
 

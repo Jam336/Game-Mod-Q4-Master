@@ -1140,7 +1140,12 @@ void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in 
 void idPlayer::MachineCall(const idCmdArgs& args)
 {
 	Machine();
+
+	// uiManager->FindGui("guis/mphud.gui", true, false, true);
 }
+
+
+
 
 
 
@@ -3491,10 +3496,10 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	assert ( _hud );
 
 	temp = _hud->State().GetInt ( "player_health", "-1" );
-	if ( temp != health ) {		
-		_hud->SetStateInt   ( "player_healthDelta", temp == -1 ? 0 : (temp - health) );
-		_hud->SetStateInt	( "player_health", health < -100 ? -100 : health );
-		_hud->SetStateFloat	( "player_healthpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)health / (float)inventory.maxHealth ) );
+	if ( temp != HP ) {		
+		_hud->SetStateInt   ( "player_healthDelta", temp == -1 ? 0 : (temp - HP) );
+		_hud->SetStateInt	( "player_health", health < -100 ? -100 : HP );
+		_hud->SetStateFloat	( "player_healthpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)HP / (float)maxHP ) );
 		_hud->HandleNamedEvent ( "updateHealth" );
 	}
 		

@@ -9,6 +9,46 @@
 #include "Actor.h"
 #include "Game_Local.h"
 
+//idPlayer *player;
+//idActor *enemy;
+//PhaseMachine phase;
+
+
+
+RPG::RPG()
+{
+	RPGMenu = NULL;
+
+}
+
+void RPG::InitializeRPGMenu()
+{
+	RPGMenu = uiManager->FindGui("guis/mphud.gui", true, false, true);
+
+	if (RPGMenu == NULL)
+	{
+		gameLocal.Printf("GUI NULL!!!!\n");
+		return;
+	}
+
+	//RPGMenu->SetStateBool("gameDraw", true);
+
+
+
+	RPGMenu->Activate(true, gameLocal.time);
+	gameLocal.Printf("Attempted GUI find and launch\n");
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -22,8 +62,15 @@ void hurt(idActor* A, int dmg)
 
 	int curr = A->HP;
 
-	curr -= dmg;
 
+	if (curr <= dmg)
+	{
+		curr = 0;
+	}
+	else 
+	{
+		curr -= dmg;
+	}
 	A->HP = curr; //pls no die
 	
 
@@ -84,10 +131,14 @@ void attack(idActor* attacker, bool basic, idActor* defender) //dmg is calculate
 	//Only runs if dmg-def is greater than 0
 	if (dmg - defp > 0)
 	{
+
+		if (dmg >= defender->HP)
+		{
+			hurt(defender, defender->HP);
+			return;
+		}
 		hurt(defender, dmg);
 	}
-	
-
 	
 	return;
 
@@ -206,21 +257,61 @@ void levelUp()
 	return;
 }
 
+/*
+/*
+void StartFight()
+{
+	phase = START;
+	enemy = new idActor();
+	player = gameLocal.GetLocalPlayer();
+
+	if (enemy == NULL || player == NULL)
+	{
+		gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
+		return;
+	}
+
+	enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
+	enemy->setStats(enemy, 150, 1, 1, 1);
+
+
+	//Setting enemy and player HP to their max at the start of combat
+	enemy->HP = enemy->maxHP;
+	player->HP = player->maxHP;
+
+
+}
+*/
+
+
 void Machine()
 {
+	RPG *handler = new RPG();
+	handler->InitializeRPGMenu();
+
+
+	//PhaseMachine phase = START;
 	PhaseMachine phase = START;
+	idActor* enemy = new idActor();
+	idPlayer* player = gameLocal.GetLocalPlayer();
+
+	
+	
 	//RPGUI = NULL;
 	//RPGUI = uiManager->FindGui("guis/RPGMenu.gui"); //This should hopefully load the UI
 
-	idActor *enemy = new idActor();
-	idPlayer *player = gameLocal.GetLocalPlayer();
+	
+	
+	
+	
 	idActor *target = nullptr; //used for item usage
 
 
 
-	if (enemy == 0 || player == 0)
+	if (enemy == NULL || player == NULL)
 	{
 		gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
+		return;
 	}
 
 
@@ -228,9 +319,12 @@ void Machine()
 	enemy->setStats(enemy, 150, 1, 1, 1);
 
 
-	//This is for testing, in the future, combat should
+	//Setting enemy and player HP to their max at the start of combat
 	enemy->HP = enemy->maxHP;
 	player->HP = player->maxHP;
+
+
+
 
 
 	
@@ -254,6 +348,9 @@ void Machine()
 		case START:
 			gameLocal.Printf("GLORIOUS COMBAT!\n");
 			phase = SELECT;
+			
+			
+			//StartFight();
 			continue;
 		case SELECT:
 			gameLocal.Printf("GLORIOUS SELECTIONS!\n");
@@ -352,6 +449,7 @@ void Machine()
 			{
 				levelUp();
 			}
+			phase = SELECT;
 
 			return;
 
@@ -368,7 +466,6 @@ void Machine()
 
 
 }
-
 
 
 

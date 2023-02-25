@@ -285,7 +285,7 @@ public:
 
 	int	xp;
 
-
+	
 
 
 	//End jad'es cookl stuff :3
@@ -445,6 +445,8 @@ public:
 	static void idPlayer::setPlayerLoadout(const idCmdArgs& args);
 
 	static void idPlayer::MachineCall(const idCmdArgs& args);
+
+	static void idPlayer::GUICall(const idCmdArgs& args);
 
 
 

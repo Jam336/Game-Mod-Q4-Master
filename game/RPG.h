@@ -14,6 +14,25 @@
 //idUserInterface* RPGUI;
 
 
+class RPG
+{
+public:
+	RPG();
+	void InitializeRPGMenu();
+private:
+	//uiManager->FindGui("guis/buymenu.gui", true, false, true);
+	idUserInterface* RPGMenu;
+
+
+	
+
+};
+
+
+
+
+
+
 
 void hurt(idActor*,int); //an actor is hurt! deals damadge to their HP
 
@@ -34,7 +53,17 @@ void levelUp();
 
 enum PhaseMachine {START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE, FLEE, DEF_ACT, END, DEFEAT };
 
+//static idPlayer* player;
+//static idActor* enemy;
+//static PhaseMachine phase;
+
+
+
+
+
 enum Choice {ATTACK, DEFEND, ITEM}; //simple three choices
+
+void StartFight();
 
 void Machine();
 

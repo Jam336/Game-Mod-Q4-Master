@@ -1,0 +1,10 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	windowDef Test
+	{
+		rect	0,0,1000,1000
+		visible	1
+		backcolor	0,1,0,1
+	}
+}

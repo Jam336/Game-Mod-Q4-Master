@@ -1,0 +1,13 @@
+// string table
+// english
+//
+
+{
+	"#str_500000"	"ATTACK"
+	"#str_500001"	"DEFEND"
+	"#str_500002"	"ITEM"
+	"#str_500003"	"FLEE"
+	"#str_500004"	"TEST"
+
+
+}

@@ -1139,12 +1139,86 @@ void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in 
 
 void idPlayer::MachineCall(const idCmdArgs& args)
 {
+
+	
+
+
+
+
 	Machine();
 
 	// uiManager->FindGui("guis/mphud.gui", true, false, true);
 }
 
+void idPlayer::left() {
 
+
+		switch (playerChoice)
+		{
+		case ATTACK:
+			playerChoice = ITEM;
+			break;
+
+		case DEFEND:
+			playerChoice = ATTACK;
+			break;
+
+		case ITEM:
+			playerChoice = DEFEND;
+			break;
+		}
+
+		UpdateHudStats(hud);
+
+
+
+
+
+
+
+}
+
+void idPlayer::right() {
+
+		switch (playerChoice)
+		{
+		case ATTACK:
+			playerChoice = DEFEND;
+			gameLocal.Printf("Defend\n");
+			break;
+
+		case DEFEND:
+			playerChoice = ITEM;
+			gameLocal.Printf("Item\n");
+			break;
+
+		case ITEM:
+			playerChoice = ATTACK;
+			gameLocal.Printf("Attack\n");
+			break;
+		}
+		char s[10];
+		choiceToString(s, playerChoice);
+
+		gameLocal.Printf(s);
+		UpdateHudStats(hud);
+
+}
+
+void idPlayer::select() {
+	
+	if (inSelection)
+	{
+		inSelection = false;
+		return;
+	}
+
+
+}
+
+void idPlayer::back() {
+
+}
 
 
 
@@ -1158,12 +1232,13 @@ idPlayer::idPlayer
 */
 idPlayer::idPlayer() {
 	memset( &usercmd, 0, sizeof( usercmd ) );
-
+	
 	//Jade time!!!
 
 	BasicEquiped = Blaster;
 	ArmorEquiped = Helmet;
 	HeavyEquiped = Rocket;
+	playerChoice = ATTACK;
 
 	maxHP = 100;
 	HP = 100;
@@ -3540,6 +3615,13 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	}
 	
 	_hud->StateChanged( gameLocal.time );
+
+	//JADE DOES STUFF HERE
+
+	_hud->SetStateInt("player_choice", playerChoice);
+
+
+
 }
 
 /*
@@ -6212,6 +6294,7 @@ void idPlayer::Weapon_Combat( void ) {
 	pfl.weaponFired = false;
  	if ( !influenceActive ) {
  		if ( ( usercmd.buttons & BUTTON_ATTACK ) && !weaponGone ) {
+			//gameLocal.Printf("PEW!");
  			FireWeapon();
  		} else if ( oldButtons & BUTTON_ATTACK ) {
  			pfl.attackHeld = false;
@@ -8531,6 +8614,7 @@ void idPlayer::GenerateImpulseForBuyAttempt( const char* itemName ) {
 /*
 ==============
 idPlayer::PerformImpulse
+JADE LOOK OVER HERE! THIS COULD BE WHAT YOU NEED FOR PLAYER MOVEMENT/INPUT
 ==============
 */
 void idPlayer::PerformImpulse( int impulse ) {
@@ -8580,6 +8664,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 
 	switch( impulse ) {
 		case IMPULSE_13: {
+			gameLocal.Printf("RELOAD \n");
 			Reload();
 			break;
 		}
@@ -8588,6 +8673,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
 				((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCycleNext( this );
 			}
+			gameLocal.Printf("Next Weapons \n");
 			break;
 		}
 		case IMPULSE_15: {
@@ -8595,6 +8681,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
 				((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCyclePrev( this );
 			}
+			gameLocal.Printf("Previous Weapon \n");
 			break;
 		}
 		case IMPULSE_17: {
@@ -8671,6 +8758,14 @@ void idPlayer::PerformImpulse( int impulse ) {
 			break;
 		}
 
+		case IMPULSE_41:	gameLocal.Printf("I HIT Z");		select();		break; // JADE IMPULSE Z
+		case IMPULSE_42:	gameLocal.Printf("I HIT X");		back();			break; // JADE IMPULSE X
+		case IMPULSE_43:	gameLocal.Printf("I HIT LEFT");		left();			break; // JADE IMPULSE LEFT
+		case IMPULSE_44:	gameLocal.Printf("I HIT RIGHT");	right();		break; // JADE IMPULSE RIGHT
+
+
+
+
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
 		case IMPULSE_100:	AttemptToBuyItem( "weapon_shotgun" );				break;
@@ -8685,10 +8780,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 		case IMPULSE_109:	AttemptToBuyItem( "weapon_napalmgun" );				break;
 		case IMPULSE_110:	/* AttemptToBuyItem( "weapon_dmg" );*/				break;
 		case IMPULSE_111:	break; // Unused
-		case IMPULSE_112:	break; // Unused
-		case IMPULSE_113:	break; // Unused
-		case IMPULSE_114:	break; // Unused
-		case IMPULSE_115:	break; // Unused
+
 		case IMPULSE_116:	break; // Unused
 		case IMPULSE_117:	break; // Unused
 		case IMPULSE_118:	AttemptToBuyItem( "item_armor_small" );				break;
@@ -8705,6 +8797,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 
 		case IMPULSE_50: {
 			ToggleFlashlight ( );
+			gameLocal.Printf("FLASHLIGHT TOGGLE! I MAYE BE USEFUL");
 			break;
 		}
 
@@ -8788,6 +8881,7 @@ void idPlayer::HandleObjectiveInput() {
 /*
 ==============
 idPlayer::EvaluateControls
+//JADE LOOK HERE YOU IDIOT
 ==============
 */
 void idPlayer::EvaluateControls( void ) {
@@ -9505,6 +9599,7 @@ void idPlayer::Think( void ) {
 	bool zoom = (usercmd.buttons & BUTTON_ZOOM) && CanZoom();
 	if ( zoom != zoomed ) {
 		if ( zoom ) {
+			gameLocal.Printf("ZOOM");
 			ProcessEvent ( &EV_Player_ZoomIn );
 		} else {
 			ProcessEvent ( &EV_Player_ZoomOut );

@@ -71,6 +71,12 @@ const int IMPULSE_27			= 27;			// <unused>
 const int IMPULSE_28			= 28;			// vote yes
 const int IMPULSE_29			= 29;			// vote no
 const int IMPULSE_40			= 40;			// repeast last radio chatter
+const int IMPULSE_41			= 41;			//Z button / Select
+const int IMPULSE_42			= 42;			//X button / Back
+const int IMPULSE_43			= 43;			//Left
+const int IMPULSE_44			= 44;			//Right
+
+
 
 // RAVEN BEGIN
 // bdube: added flashlight

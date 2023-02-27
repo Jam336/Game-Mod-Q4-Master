@@ -28,9 +28,9 @@ private:
 
 };
 
+enum Choice { ATTACK, DEFEND, ITEM }; //simple three choices
 
-
-
+enum PhaseMachine { START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE, FLEE, DEF_ACT, END, DEFEAT };
 
 
 
@@ -50,8 +50,10 @@ bool xpThresh();
 
 void levelUp();
 
+void choiceToString(char* outStr, Choice c);
 
-enum PhaseMachine {START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE, FLEE, DEF_ACT, END, DEFEAT };
+
+
 
 //static idPlayer* player;
 //static idActor* enemy;
@@ -61,7 +63,7 @@ enum PhaseMachine {START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE
 
 
 
-enum Choice {ATTACK, DEFEND, ITEM}; //simple three choices
+
 
 void StartFight();
 

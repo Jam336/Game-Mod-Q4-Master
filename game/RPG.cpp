@@ -257,6 +257,74 @@ void levelUp()
 	return;
 }
 
+
+
+
+Choice makeChoice(idPlayer* player)
+{
+
+	if (player == NULL)
+	{
+		gameLocal.Printf("NULL POINTERS, EXITING CHOICE\n");
+		return ATTACK;
+	}
+
+	player->inSelection = true;
+	if(player->playerChoice == NULL)
+	{
+		player->playerChoice = ATTACK;
+	}
+	
+
+
+
+
+
+
+	return ATTACK;
+
+
+
+
+
+}
+
+
+
+char atkStr[10] = "Attack";
+char dfdStr[10] = "Defend";
+char itmStr[10] = "Item";
+char nullStr[10] = "Nulll";
+
+
+void choiceToString(char* outStr, Choice c)
+{
+	char str[10];
+	if (c == NULL)
+	{
+		outStr = nullStr;
+		return;
+	}
+	switch (c)
+	{
+	case ATTACK:
+		outStr = atkStr;
+		return;
+	case DEFEND:
+		outStr = dfdStr;
+		return;
+	case ITEM:
+		outStr = itmStr;
+		return;
+	}
+
+}
+
+
+
+
+
+
 /*
 /*
 void StartFight()
@@ -284,8 +352,11 @@ void StartFight()
 */
 
 
+
+
 void Machine()
 {
+	
 	RPG *handler = new RPG();
 	handler->InitializeRPGMenu();
 
@@ -295,6 +366,17 @@ void Machine()
 	idActor* enemy = new idActor();
 	idPlayer* player = gameLocal.GetLocalPlayer();
 
+
+
+	bool basic, heavy;
+	item i;
+
+
+	heavy = true;
+
+	Choice c = ATTACK;
+
+	
 	
 	
 	//RPGUI = NULL;
@@ -322,7 +404,7 @@ void Machine()
 	//Setting enemy and player HP to their max at the start of combat
 	enemy->HP = enemy->maxHP;
 	player->HP = player->maxHP;
-
+	c = player->playerChoice;
 
 
 
@@ -332,13 +414,7 @@ void Machine()
 	gameLocal.Printf("Player Loadout: %u, %u, %u, HP: %u", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped, player->HP);
 	gameLocal.Printf("Enemy Loadout: %u, %u, %u, HP: %u", enemy->BasicEquiped, enemy->ArmorEquiped, enemy->HeavyEquiped, enemy->HP);
 
-	bool basic, heavy;
-	item i;
-	
 
-	heavy = true;
-
-	Choice c = ATTACK;
 
 
 	while (true)
@@ -355,7 +431,7 @@ void Machine()
 		case SELECT:
 			gameLocal.Printf("GLORIOUS SELECTIONS!\n");
 
-
+			//c = makeChoice(player);
 
 			//TODO, REPLACE THESE IFS WITH PROPER EVENT UI HANDLING
 
@@ -436,7 +512,10 @@ void Machine()
 
 			useItem(i, player, target);
 
-			phase = END;
+			gameLocal.Printf("Enemy HP: %u", enemy->HP);
+
+
+			phase = DEF_ACT;
 
 			continue;
 

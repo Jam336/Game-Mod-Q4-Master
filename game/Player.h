@@ -6,6 +6,8 @@
 #ifndef __GAME_PLAYER_H__
 #define __GAME_PLAYER_H__
 
+#include "RPG.h"
+
 /*
 ===============================================================================
 
@@ -282,6 +284,9 @@ public:
 
 	//Jade's super cools stuff!!!
 
+	bool inSelection;
+
+	Choice playerChoice;
 
 	int	xp;
 
@@ -445,6 +450,14 @@ public:
 	static void idPlayer::setPlayerLoadout(const idCmdArgs& args);
 
 	static void idPlayer::MachineCall(const idCmdArgs& args);
+
+	void left();
+
+	void right();
+
+	void select();
+
+	void back();
 
 	static void idPlayer::GUICall(const idCmdArgs& args);
 

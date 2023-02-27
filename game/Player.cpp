@@ -1152,7 +1152,8 @@ void idPlayer::MachineCall(const idCmdArgs& args)
 
 void idPlayer::left() {
 
-
+	if (ActionSelect)
+	{
 		switch (playerChoice)
 		{
 		case ATTACK:
@@ -1167,6 +1168,13 @@ void idPlayer::left() {
 			playerChoice = DEFEND;
 			break;
 		}
+	}
+	if (AttackSelect)
+	{
+	}
+	if (ItemSelect)
+	{
+	}
 
 		UpdateHudStats(hud);
 

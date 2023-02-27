@@ -8,6 +8,7 @@
 #include "RPG.h"
 #include "Actor.h"
 #include "Game_Local.h"
+#include "StartFight.h"
 
 //idPlayer *player;
 //idActor *enemy;
@@ -325,20 +326,32 @@ void choiceToString(char* outStr, Choice c)
 
 
 
-/*
-/*
 void StartFight()
 {
+
+	
+
+	gameLocal.Printf("STARTING FIGHT");
 	phase = START;
-	enemy = new idActor();
+	EnemyList [0] = new idActor();
 	player = gameLocal.GetLocalPlayer();
 
-	if (enemy == NULL || player == NULL)
+	if (EnemyList == NULL || player == NULL)
 	{
 		gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
 		return;
 	}
+	/*
+	for (idActor *a : EnemyList)
+	{
+		if (a == NULL)
+		{
+			gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
+			return;
+		}
 
+	}*/
+	idActor *enemy = EnemyList[0];
 	enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
 	enemy->setStats(enemy, 150, 1, 1, 1);
 
@@ -349,7 +362,7 @@ void StartFight()
 
 
 }
-*/
+
 
 
 
@@ -357,14 +370,36 @@ void StartFight()
 void Machine()
 {
 	
+
+	
+
 	RPG *handler = new RPG();
 	handler->InitializeRPGMenu();
 
 
-	//PhaseMachine phase = START;
-	PhaseMachine phase = START;
-	idActor* enemy = new idActor();
+
+
+
+
+	idActor* enemy = EnemyList[0];
 	idPlayer* player = gameLocal.GetLocalPlayer();
+
+
+
+
+	if (enemy == NULL || player == NULL || phase == START)
+	{
+		StartFight();
+
+		idActor* enemy = EnemyList[0];
+		idPlayer* player = gameLocal.GetLocalPlayer();
+	}
+
+
+
+
+
+
 
 
 
@@ -373,7 +408,7 @@ void Machine()
 
 
 	heavy = true;
-
+	basic = false;
 	Choice c = ATTACK;
 
 	
@@ -388,7 +423,7 @@ void Machine()
 	
 	idActor *target = nullptr; //used for item usage
 
-
+	
 
 	if (enemy == NULL || player == NULL)
 	{
@@ -417,19 +452,20 @@ void Machine()
 
 
 
-	while (true)
-	{
 		switch (phase)
 		{
 		case START:
 			gameLocal.Printf("GLORIOUS COMBAT!\n");
+			//StartFight();
+			
 			phase = SELECT;
 			
+			gameLocal.Printf("MAKE AN ACTION SELECTION\n");
 			
-			//StartFight();
-			continue;
+			//continue;
+			break;
 		case SELECT:
-			gameLocal.Printf("GLORIOUS SELECTIONS!\n");
+			
 
 			//c = makeChoice(player);
 
@@ -439,16 +475,20 @@ void Machine()
 			{
 			case ATTACK:
 				phase = ATK_MENU;
+				gameLocal.Printf("SELECTED ATTACK! CHOOSE YOUR ATTACK\n");
 				break;
 			case DEFEND:
 				phase = DEF_MENU;
+				gameLocal.Printf("SELECTED DEFENSE!\n");
 				break;
 			case ITEM:
 				phase = ITM_MENU;
+				gameLocal.Printf("SELECTED ITEMS! CHOOSE YOUR ITEM\n");
 				break;
 			}
 
-			continue;
+			//continue;
+			break;
 		case ATK_MENU:
 			gameLocal.Printf("GLORIOUS ATTACK MENU!\n");
 
@@ -458,7 +498,8 @@ void Machine()
 
 
 			phase = ATK_ACT;
-			continue;
+			//continue;
+			break;
 		case ATK_ACT:
 			gameLocal.Printf("GLORIOUS ATTACK ACTION\n");
 
@@ -471,15 +512,25 @@ void Machine()
 				attack(player, false, enemy);
 			}
 			gameLocal.Printf("Enemy HP: %u", enemy->HP);
+
+			if (enemy->HP == 0)
+			{
+				phase = END;
+				break;
+			}
+
+
 			phase = DEF_ACT;
-			continue;
+			//continue;
+			break;
 
 
 		case DEF_MENU:
 			gameLocal.Printf("GLORIOUS DEFENSIVE MANEUVER!\n");
 
 			phase = DEF_ACT;
-			continue;
+			//continue;
+			break;
 
 		case DEF_ACT:
 			gameLocal.Printf("GLORIOUS DODGING!\n");
@@ -493,8 +544,16 @@ void Machine()
 
 
 			gameLocal.Printf("player HP: %u", player->HP);
-			phase = END;
-			continue;
+
+			if (player->HP == 0)
+			{
+				phase = DEFEAT;
+			}
+
+
+			phase = START;
+			//continue;
+			break;
 
 		case ITM_MENU:
 
@@ -506,7 +565,9 @@ void Machine()
 			target = enemy;
 			
 			phase = ITM_USE;
-			continue;
+
+			break;
+			
 
 		case ITM_USE:
 
@@ -517,13 +578,15 @@ void Machine()
 
 			phase = DEF_ACT;
 
-			continue;
+			break;
+
+			
 
 
 
 		case END:
 			gameLocal.Printf("GLORIOUS END!\n");
-			player->xp += 5;
+			player->xp += 20;
 			while (xpThresh())
 			{
 				levelUp();
@@ -541,7 +604,7 @@ void Machine()
 		default:
 			return;
 		}
-	}
+	
 
 
 }

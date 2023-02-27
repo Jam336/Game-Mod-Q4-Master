@@ -290,6 +290,8 @@ public:
 
 	int	xp;
 
+	bool ActionSelect = false, AttackSelect = false, ItemSelect = false;
+
 	
 
 

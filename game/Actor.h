@@ -137,6 +137,10 @@ public:
 	int						DEF;	//determines base damadge taken
 	int						SPD;	//determines dodge chance? Possibly scrap SPD
 
+	
+	int						BossCase = 0;
+
+
 
 
 	//Equipment

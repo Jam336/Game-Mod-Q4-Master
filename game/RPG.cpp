@@ -619,7 +619,12 @@ void Machine()
 				{
 					if (a == NULL || a->HP == 0) continue;
 					
-					attackBasic(a, player);
+
+					//checks if a is a boss, and if so does their special little case
+					if (a->BossCase == 0) attackBasic(a, player);
+					else (special(a, player,a->BossCase));
+
+					
 
 				}
 				

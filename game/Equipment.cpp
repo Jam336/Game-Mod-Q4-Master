@@ -213,10 +213,12 @@ void useItem(item i, idActor* A, idActor* target)
     switch (i) //Armor Piercing and portable shield are covered in the Attack function!
     {
     case MedKit:
-        hurt(target, -20);
+        hurt(target, -30);
+        A->itemUsed = true;
         return;
     case Grenade:
         hurt(target, 30);
+        A->itemUsed = true;
         return;
     case BattlePowder:
         //this is gonna be the hard one

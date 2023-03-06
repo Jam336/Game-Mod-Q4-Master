@@ -1077,6 +1077,8 @@ bool idInventory::UseAmmo( int index, int amount ) {
 
 //Jades player funct
 
+
+
 void idPlayer::printRPGPlayer(const idCmdArgs &args) //Should print custom RPG stuff
 {
 	idPlayer *player = gameLocal.GetLocalPlayer();
@@ -1105,6 +1107,13 @@ void idPlayer::printRPGPlayer(const idCmdArgs &args) //Should print custom RPG s
 
 
 }
+
+
+
+
+
+
+
 
 void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in debug for now
 {
@@ -1150,30 +1159,91 @@ void idPlayer::MachineCall(const idCmdArgs& args)
 	// uiManager->FindGui("guis/mphud.gui", true, false, true);
 }
 
+
+
+bool basic;
+int currentSelection = 0;
+//playerItem = MedKit;
+bool itemUsed;
+
+const char* Selection;
+const char* MenuState;
+
 void idPlayer::left() {
 
 	if (ActionSelect)
 	{
 		switch (playerChoice)
 		{
+
 		case ATTACK:
 			playerChoice = ITEM;
+			gameLocal.Printf("Item\n");
+			//_hud->SetStateInt("player_choice", currentSelection);
+			Selection = "Item";
 			break;
 
 		case DEFEND:
 			playerChoice = ATTACK;
+			gameLocal.Printf("Attack\n");
+			Selection = "Attack";
 			break;
 
 		case ITEM:
 			playerChoice = DEFEND;
+			gameLocal.Printf("Defend\n");
+			Selection = "Defend";
 			break;
 		}
+		currentSelection = playerChoice;
 	}
-	if (AttackSelect)
+	else if (AttackSelect)
 	{
+		basic = true;
+		
+
+		currentSelection = 0;
+		Selection = "Basic";
 	}
-	if (ItemSelect)
+	else if (ItemSelect)
 	{
+		switch (playerItem)
+		{
+		case MedKit:
+			playerItem = BattlePowder;
+			gameLocal.Printf("Battle Powder\n");
+			Selection = "Battle Powder";
+			break;
+
+		case PortableCover:
+			playerItem = MedKit;
+			gameLocal.Printf("Medkit\n");
+			Selection = "Medkit";
+
+			break;
+
+		case ArmorPiercingBullets:
+			playerItem = PortableCover;
+			gameLocal.Printf("Portable Cover\n");
+			Selection = "Portable Cover";
+			break;
+
+		case Grenade:
+			playerItem = ArmorPiercingBullets;
+			gameLocal.Printf("Armor Piercing Bullets\n");
+			Selection = "Arm Piercing";
+			break;
+
+		case BattlePowder:
+			playerItem = Grenade;
+			gameLocal.Printf("Grenade\n");
+			Selection = "Grenade";
+
+			break;
+		}
+		currentSelection = playerItem;
+
+		//currentSelection = playerChoice;
 	}
 
 		UpdateHudStats(hud);
@@ -1188,29 +1258,79 @@ void idPlayer::left() {
 
 void idPlayer::right() {
 
+	if (ActionSelect)
+	{
 		switch (playerChoice)
 		{
 		case ATTACK:
 			playerChoice = DEFEND;
 			gameLocal.Printf("Defend\n");
+			Selection = "Defend";
 			break;
 
 		case DEFEND:
 			playerChoice = ITEM;
 			gameLocal.Printf("Item\n");
+			Selection = "Item";
 			break;
 
 		case ITEM:
 			playerChoice = ATTACK;
 			gameLocal.Printf("Attack\n");
+			Selection = "Attack";
 			break;
 		}
-		char s[10];
-		choiceToString(s, playerChoice);
+		currentSelection = playerChoice;
+	}
+	else if (AttackSelect)
+	{
+		basic = false;
 
-		gameLocal.Printf(s);
-		UpdateHudStats(hud);
+		currentSelection = 1;
+		Selection = "Heavy";
 
+	}
+	else if (ItemSelect)
+	{
+		switch (playerItem)
+		{
+		
+		case MedKit:
+			playerItem = PortableCover;
+			gameLocal.Printf("Portable Cover\n");
+			Selection = "Portable Cover";
+			break;
+
+		case PortableCover:
+			playerItem = ArmorPiercingBullets;
+			gameLocal.Printf("Armor Piercing Bullets\n");
+			Selection = "Arm Piercing";
+			break;
+
+		case ArmorPiercingBullets:
+			playerItem = Grenade;
+			gameLocal.Printf("Grenade\n");
+			Selection = "Grenade";
+			break;
+
+		case Grenade:
+			playerItem = BattlePowder;
+			gameLocal.Printf("Battle Powder\n");
+			Selection = "Battle Powder";
+			break;
+
+		case BattlePowder:
+			playerItem = MedKit;
+			gameLocal.Printf("Medkit\n");
+			Selection = "Medkit";
+
+			break;
+		}
+		currentSelection = playerItem;
+
+
+	}
+	
 }
 
 void idPlayer::select() {
@@ -1218,15 +1338,144 @@ void idPlayer::select() {
 	if (inSelection)
 	{
 		inSelection = false;
+		Machine();
 		return;
 	}
+	
+	Machine();
+	phaseToString(playerPhase, MenuState);
+	
 
+
+	UpdateHudStats(hud);
 
 }
 
 void idPlayer::back() {
 
+
+
+	UpdateHudStats(hud);
+
+	if (playerPhase == ATK_MENU || playerPhase == DEF_MENU || playerPhase == ITM_MENU) //this should hopefully allow a player to back track
+	{
+		playerPhase = START;
+		AttackSelect = false;
+		ItemSelect = false;
+		Machine();
+	}
+
+
+
+
+
+
 }
+
+
+
+void idPlayer::phaseToString(PhaseMachine p, const char* s)
+{
+	switch (p)
+	{
+	case START:
+		s = "Start/Initalizing";
+		
+		break;
+	case SELECT:
+		s = "Select";
+		break;
+	case ATK_MENU:
+		s = "Select your Attack!";
+		break;
+	case ATK_ACT:
+		s = "Attacking!";
+		break;
+	case DEF_MENU:
+		s = "preparing to Defend!";
+		break;
+	case DEF_ACT:
+		s = "Defending!";
+		break;
+	case ITM_MENU:
+		s = "Select Item";
+		break;
+	case ITM_USE:
+		s = "Using Item!";
+		break;
+	case END:
+		s = "battle over, Success!";
+		break;
+	case DEFEAT:
+		s = "battle over, DEFEAT!";
+		break;
+
+
+
+	}
+
+
+
+
+
+	hud->SetStateString("current_phase", s);
+
+
+
+}
+
+
+void idPlayer::phaseToString(PhaseMachine p, const char* s, idUserInterface *_hud)
+{
+	switch (p)
+	{
+	case START:
+		s = "Start/Initalizing";
+
+		break;
+	case SELECT:
+		s = "Select";
+		break;
+	case ATK_MENU:
+		s = "Select_your_Attack!";
+		break;
+	case ATK_ACT:
+		s = "Attacking!";
+		break;
+	case DEF_MENU:
+		s = "preparing_to_Defend!";
+		break;
+	case DEF_ACT:
+		s = "Defending!";
+		break;
+	case ITM_MENU:
+		s = "Select_Item";
+		break;
+	case ITM_USE:
+		s = "Using_Item!";
+		break;
+	case END:
+		s = "battle over_Success!";
+		break;
+	case DEFEAT:
+		s = "battle over_DEFEAT!";
+		break;
+
+
+
+	}
+
+
+
+
+
+	_hud->SetStateString("current_phase", s);
+
+
+
+}
+
+
 
 
 
@@ -1247,6 +1496,9 @@ idPlayer::idPlayer() {
 	ArmorEquiped = Helmet;
 	HeavyEquiped = Rocket;
 	playerChoice = ATTACK;
+	playerPhase = START;
+
+	playerItem = MedKit;
 
 	maxHP = 100;
 	HP = 100;
@@ -3624,9 +3876,27 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	
 	_hud->StateChanged( gameLocal.time );
 
-	//JADE DOES STUFF HERE
+	//JADE GUI DOES STUFF HERE
 
-	_hud->SetStateInt("player_choice", playerChoice);
+	//Better explanation:
+	_hud->SetStateInt("player_choice", currentSelection);
+	_hud->SetStateInt("current_phase", playerPhase);
+	if (Selection == NULL)
+	{
+		Selection = "";
+	}
+	_hud->SetStateString("player_choice", Selection);
+	
+	
+	phaseToString(playerPhase, MenuState, _hud);
+	if (MenuState== NULL)
+	{
+		
+		MenuState = "Initializing...";
+		
+	}
+
+	//_hud->SetStateString("current_phase", MenuState); //plz no crash
 
 
 
@@ -8766,10 +9036,10 @@ void idPlayer::PerformImpulse( int impulse ) {
 			break;
 		}
 
-		case IMPULSE_41:	gameLocal.Printf("I HIT Z");		select();		break; // JADE IMPULSE Z
-		case IMPULSE_42:	gameLocal.Printf("I HIT X");		back();			break; // JADE IMPULSE X
-		case IMPULSE_43:	gameLocal.Printf("I HIT LEFT");		left();			break; // JADE IMPULSE LEFT
-		case IMPULSE_44:	gameLocal.Printf("I HIT RIGHT");	right();		break; // JADE IMPULSE RIGHT
+		case IMPULSE_41:	select();		break; // JADE IMPULSE Z
+		case IMPULSE_42:	back();			break; // JADE IMPULSE X
+		case IMPULSE_43:	left();			break; // JADE IMPULSE LEFT
+		case IMPULSE_44:	right();		break; // JADE IMPULSE RIGHT
 
 
 

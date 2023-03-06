@@ -80,7 +80,7 @@ void hurt(idActor* A, int dmg)
 
 void attack(idActor* attacker, bool basic, idActor* defender) //dmg is calculated as ATK*Weapon - DEF*Armor
 {
-	if (attacker == 0 || defender == 0)
+	if (attacker == NULL || defender == NULL)
 	{
 		return;
 	}
@@ -89,6 +89,8 @@ void attack(idActor* attacker, bool basic, idActor* defender) //dmg is calculate
 
 	int atk = attacker->ATK;
 	int atkSpd = attacker->SPD;
+	
+	
 	if(attacker->lastUsed == ArmorPiercingBullets)
 	{
 		atk += 10;
@@ -115,6 +117,8 @@ void attack(idActor* attacker, bool basic, idActor* defender) //dmg is calculate
 
 
 	int dmg = 0; 
+	
+	
 	if (basic) //because I ma bad at writing code, I have to use a bool for if we're using a basic or not
 	{
 		dmg = atk * calcDmg(attacker->BasicEquiped);
@@ -241,7 +245,7 @@ void levelUp()
 {
 
 	idPlayer* player = gameLocal.GetLocalPlayer();
-	if (player == 0)
+	if (player == NULL)
 	{
 		return;
 	}
@@ -252,7 +256,7 @@ void levelUp()
 	player->SPD +=5;
 	player->maxHP += 25;
 
-	gameLocal.Printf("Leveled Up!");
+	gameLocal.Printf("Leveled Up!\n");
 
 
 	return;
@@ -261,7 +265,7 @@ void levelUp()
 
 
 
-Choice makeChoice(idPlayer* player)
+Choice makeChoice(idPlayer* player) //DEPRECATED
 {
 
 	if (player == NULL)
@@ -298,7 +302,7 @@ char itmStr[10] = "Item";
 char nullStr[10] = "Nulll";
 
 
-void choiceToString(char* outStr, Choice c)
+void choiceToString(char* outStr, Choice c) //DEPRECATED
 {
 	char str[10];
 	if (c == NULL)
@@ -331,37 +335,47 @@ void StartFight()
 
 	
 
-	gameLocal.Printf("STARTING FIGHT");
+	gameLocal.Printf("STARTING FIGHT\n");
 	phase = START;
 	EnemyList [0] = new idActor();
+	EnemyList[1] = new idActor();
+	EnemyList[2] = new idActor();
 	player = gameLocal.GetLocalPlayer();
 
 	if (EnemyList == NULL || player == NULL)
 	{
-		gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
+		gameLocal.Printf("NULL POINTERS, EXITING COMBAT\n");
 		return;
 	}
-	/*
+	
 	for (idActor *a : EnemyList)
 	{
 		if (a == NULL)
 		{
-			gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
-			return;
+			//gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
+			continue;
 		}
+		idActor* enemy = a;
+		enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
+		enemy->setStats(enemy, 100, 1, 1, 1);
+		enemy->HP = enemy->maxHP;
 
-	}*/
-	idActor *enemy = EnemyList[0];
-	enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
-	enemy->setStats(enemy, 150, 1, 1, 1);
+	}
+	
 
 
 	//Setting enemy and player HP to their max at the start of combat
-	enemy->HP = enemy->maxHP;
+	
 	player->HP = player->maxHP;
 
 
 }
+
+
+bool initialized = false;
+
+bool defended = false;
+
 
 
 
@@ -373,8 +387,8 @@ void Machine()
 
 	
 
-	RPG *handler = new RPG();
-	handler->InitializeRPGMenu();
+	//RPG *handler = new RPG();
+	//handler->InitializeRPGMenu();
 
 
 
@@ -387,12 +401,13 @@ void Machine()
 
 
 
-	if (enemy == NULL || player == NULL || phase == START)
+	if (enemy == NULL || player == NULL||!initialized)
 	{
 		StartFight();
 
 		idActor* enemy = EnemyList[0];
 		idPlayer* player = gameLocal.GetLocalPlayer();
+		initialized = true;
 	}
 
 
@@ -405,6 +420,8 @@ void Machine()
 
 	bool basic, heavy;
 	item i;
+
+	
 
 
 	heavy = true;
@@ -427,29 +444,22 @@ void Machine()
 
 	if (enemy == NULL || player == NULL)
 	{
-		gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
+		gameLocal.Printf("NULL POINTERS, EXITING COMBAT\n");
 		return;
 	}
 
 
-	enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
-	enemy->setStats(enemy, 150, 1, 1, 1);
-
-
-	//Setting enemy and player HP to their max at the start of combat
-	enemy->HP = enemy->maxHP;
-	player->HP = player->maxHP;
 	c = player->playerChoice;
 
-
+	PhaseMachine phase = player->playerPhase;
 
 
 	
 
-	gameLocal.Printf("Player Loadout: %u, %u, %u, HP: %u", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped, player->HP);
-	gameLocal.Printf("Enemy Loadout: %u, %u, %u, HP: %u", enemy->BasicEquiped, enemy->ArmorEquiped, enemy->HeavyEquiped, enemy->HP);
+	gameLocal.Printf("Player Loadout: %u, %u, %u, HP: %u\n", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped, player->HP);
+	gameLocal.Printf("Enemy Loadout: %u, %u, %u, HP: %u\n", enemy->BasicEquiped, enemy->ArmorEquiped, enemy->HeavyEquiped, enemy->HP);
 
-
+	bool endFlag; //determines if player goes to endPhase from combat
 
 
 		switch (phase)
@@ -458,7 +468,9 @@ void Machine()
 			gameLocal.Printf("GLORIOUS COMBAT!\n");
 			//StartFight();
 			
-			phase = SELECT;
+			player->playerPhase = SELECT;
+			
+			player->ActionSelect = true;
 			
 			gameLocal.Printf("MAKE AN ACTION SELECTION\n");
 			
@@ -474,16 +486,22 @@ void Machine()
 			switch(c)
 			{
 			case ATTACK:
-				phase = ATK_MENU;
+				player->playerPhase = ATK_MENU;
 				gameLocal.Printf("SELECTED ATTACK! CHOOSE YOUR ATTACK\n");
+				player->ActionSelect = false;
+				player->AttackSelect = true;
 				break;
 			case DEFEND:
-				phase = DEF_MENU;
+				player->playerPhase = DEF_MENU;
 				gameLocal.Printf("SELECTED DEFENSE!\n");
+				player->ActionSelect = false;
+				
 				break;
 			case ITEM:
-				phase = ITM_MENU;
+				player->playerPhase = ITM_MENU;
 				gameLocal.Printf("SELECTED ITEMS! CHOOSE YOUR ITEM\n");
+				player->ActionSelect = false;
+				player->ItemSelect = true;
 				break;
 			}
 
@@ -497,11 +515,22 @@ void Machine()
 
 
 
-			phase = ATK_ACT;
+			player->playerPhase = ATK_ACT;
 			//continue;
 			break;
 		case ATK_ACT:
 			gameLocal.Printf("GLORIOUS ATTACK ACTION\n");
+			
+			if (player->lastUsed == ArmorPiercingBullets && player->itemUsed == false)
+			{
+				
+				player->ATK += 5;
+				gameLocal.Printf("Used Armor Piercing Bullets! Increased ATK!\n");
+			}
+
+
+
+
 
 			if (basic)
 			{
@@ -509,18 +538,53 @@ void Machine()
 			}
 			else if (heavy)
 			{
-				attack(player, false, enemy);
+				//Heavy attacks target all enemies
+				for (idActor *a : EnemyList)
+				{
+					if (a == NULL) continue;
+					attack(player, false, a);
+					gameLocal.Printf("Enemy HP: %u\n", a->HP);
+				}
+				
 			}
-			gameLocal.Printf("Enemy HP: %u", enemy->HP);
+			
 
-			if (enemy->HP == 0)
+
+			if (player->lastUsed == ArmorPiercingBullets && player->itemUsed == false)
 			{
-				phase = END;
+				player->ATK -= 5;
+				player->itemUsed = true;;
+			}
+
+
+
+			endFlag = true;
+
+			for (idActor* a : EnemyList)
+			{
+				if (a == NULL) continue;
+				if (a->HP > 1) endFlag = false; break;
+			}
+
+
+
+
+			player->AttackSelect = false;
+
+
+			if (endFlag)
+			{
+				player->playerPhase = END;
 				break;
 			}
+			else
+			{
+				player->playerPhase = DEF_ACT;
+			}
+			
 
 
-			phase = DEF_ACT;
+			
 			//continue;
 			break;
 
@@ -528,7 +592,8 @@ void Machine()
 		case DEF_MENU:
 			gameLocal.Printf("GLORIOUS DEFENSIVE MANEUVER!\n");
 
-			phase = DEF_ACT;
+			player->playerPhase = DEF_ACT;
+			defended = true;
 			//continue;
 			break;
 
@@ -537,21 +602,69 @@ void Machine()
 
 			//TODO, Add randomness to enemy actions
 
-
-			attackHeavy(enemy, player);
-
-
-
-
-			gameLocal.Printf("player HP: %u", player->HP);
-
-			if (player->HP == 0)
+			if (defended)
 			{
-				phase = DEFEAT;
+				player->DEF = player->DEF * 2;
+			}
+
+			if (player->lastUsed == PortableCover && player->itemUsed == false)
+			{
+
+				player->itemUsed = true;
+				gameLocal.Printf("Used portable shield! avoided DMG!\n");
+			}
+			else{ 
+				
+				for (idActor* a : EnemyList)
+				{
+					if (a == NULL || a->HP == 0) continue;
+					
+					attackBasic(a, player);
+
+				}
+				
+			
+			}
+
+			//need to loop through the enemy list
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+			
+
+			if (defended)
+			{
+				player->DEF = player->DEF / 2;
+				defended = false;
 			}
 
 
-			phase = START;
+
+
+			gameLocal.Printf("player HP: %u \n", player->HP);
+
+			if (player->HP == 0)
+			{
+				player->playerPhase = DEFEAT;
+			}
+			else
+			{
+				player->playerPhase = START;
+			}
+
+
+			
 			//continue;
 			break;
 
@@ -559,24 +672,42 @@ void Machine()
 
 			//I'll have some better code for how targeting works but for now, this is good enough
 
+			gameLocal.Printf("GLORIOUS ITEM MENU!\n");
 
-
-			i = Grenade;
-			target = enemy;
+			//i = NONE;
 			
-			phase = ITM_USE;
+			player->playerPhase = ITM_USE;
 
 			break;
 			
 
 		case ITM_USE:
 
+
+			gameLocal.Printf("GLORIOUS ITEM USE!\n");
+
+			player->itemUsed = false;
+
+			i = player->playerItem;
+
+			if (i == Grenade)
+			{
+				target = enemy;
+			}
+			else
+			{
+				target = player;
+			}
+
+
+
 			useItem(i, player, target);
 
-			gameLocal.Printf("Enemy HP: %u", enemy->HP);
+			gameLocal.Printf("Target HP: %u", target->HP);
 
+			player->ItemSelect = false;
 
-			phase = DEF_ACT;
+			player->playerPhase = DEF_ACT;
 
 			break;
 
@@ -591,12 +722,15 @@ void Machine()
 			{
 				levelUp();
 			}
-			phase = SELECT;
+			player->playerPhase = START;
+			initialized = false;
 
 			return;
 
 		case DEFEAT:
 			gameLocal.Printf("EMBARASSING FAILURE\n");
+			initialized = false;
+			player->playerPhase = START;
 			return;
 
 

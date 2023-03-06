@@ -292,6 +292,11 @@ public:
 
 	bool ActionSelect = false, AttackSelect = false, ItemSelect = false;
 
+	PhaseMachine playerPhase;
+	item playerItem;
+	bool itemUsed;
+	//char
+
 	
 
 
@@ -462,6 +467,11 @@ public:
 	void back();
 
 	static void idPlayer::GUICall(const idCmdArgs& args);
+
+	void idPlayer::phaseToString(PhaseMachine, const char*);
+
+	void idPlayer::phaseToString(PhaseMachine, const char*, idUserInterface*);
+
 
 
 

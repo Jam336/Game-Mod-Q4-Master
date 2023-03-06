@@ -12,7 +12,7 @@ enum wep{Blaster,Machine_Gun,Shotgun,Nail_Gun,Gauntlet,Rocket,Mistake,Dark,Rail,
 
 enum arm {Helmet, Light, Medium, Heavy, God};
 
-enum item {MedKit, PortableCover, ArmorPiercingBullets, Grenade, BattlePowder};
+enum item {MedKit, PortableCover, ArmorPiercingBullets, Grenade, BattlePowder, NONE};
 
 
 

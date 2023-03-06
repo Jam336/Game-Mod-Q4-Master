@@ -137,12 +137,16 @@ public:
 	int						DEF;	//determines base damadge taken
 	int						SPD;	//determines dodge chance? Possibly scrap SPD
 
+
+
 	//Equipment
 	wep BasicEquiped;
 	arm ArmorEquiped;
 	wep HeavyEquiped;
 
 	item lastUsed;
+
+	bool itemUsed;
 
 
 

@@ -295,6 +295,15 @@ public:
 	PhaseMachine playerPhase;
 	item playerItem;
 	bool itemUsed;
+
+	idActor* EnemyList[5];
+
+	idActor* Selected;
+
+
+
+
+
 	//char
 
 	

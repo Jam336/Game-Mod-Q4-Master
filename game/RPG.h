@@ -59,6 +59,8 @@ void choiceToString(char* outStr, Choice c);
 
 
 
+
+
 void StartFight();
 
 void Machine();

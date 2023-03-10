@@ -336,11 +336,14 @@ void StartFight()
 	
 
 	gameLocal.Printf("STARTING FIGHT\n");
-	phase = START;
-	EnemyList [0] = new idActor();
-	EnemyList[1] = new idActor();
-	EnemyList[2] = new idActor();
 	player = gameLocal.GetLocalPlayer();
+	
+	
+	phase = START;
+	player->EnemyList [0] = new idActor();
+	player->EnemyList[1] = new idActor();
+	player->EnemyList[2] = new idActor();
+	
 
 	if (EnemyList == NULL || player == NULL)
 	{
@@ -348,7 +351,7 @@ void StartFight()
 		return;
 	}
 	
-	for (idActor *a : EnemyList)
+	for (idActor *a : player->EnemyList)
 	{
 		if (a == NULL)
 		{
@@ -395,7 +398,7 @@ void Machine()
 
 
 
-	idActor* enemy = EnemyList[0];
+	idActor* enemy = player->EnemyList[0];
 	idPlayer* player = gameLocal.GetLocalPlayer();
 
 
@@ -405,7 +408,7 @@ void Machine()
 	{
 		StartFight();
 
-		idActor* enemy = EnemyList[0];
+		idActor* enemy = player->EnemyList[0];
 		idPlayer* player = gameLocal.GetLocalPlayer();
 		initialized = true;
 	}
@@ -539,7 +542,7 @@ void Machine()
 			else if (heavy)
 			{
 				//Heavy attacks target all enemies
-				for (idActor *a : EnemyList)
+				for (idActor *a : player->EnemyList)
 				{
 					if (a == NULL) continue;
 					attack(player, false, a);
@@ -560,7 +563,7 @@ void Machine()
 
 			endFlag = true;
 
-			for (idActor* a : EnemyList)
+			for (idActor* a : player->EnemyList)
 			{
 				if (a == NULL) continue;
 				if (a->HP > 1) endFlag = false; break;
@@ -615,7 +618,7 @@ void Machine()
 			}
 			else{ 
 				
-				for (idActor* a : EnemyList)
+				for (idActor* a : player->EnemyList)
 				{
 					if (a == NULL || a->HP == 0) continue;
 					

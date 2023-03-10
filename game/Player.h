@@ -296,11 +296,17 @@ public:
 	item playerItem;
 	bool itemUsed;
 
-	idActor* EnemyList[6];
+	idActor* EnemyList[3];
 
 	int actorSelectedIndex;
 	idActor* actorSelected;
 
+	bool ATKFlag;
+
+
+	enum SelectionState{None,Action, Attack, Item, Target};
+
+	SelectionState menuState = None;
 
 
 

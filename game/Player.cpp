@@ -1093,14 +1093,19 @@ void idPlayer::printRPGPlayer(const idCmdArgs &args) //Should print custom RPG s
 
 	gameLocal.Printf("Testy Testy! Here's some info! Basic: %u, Armor: %u, Heavy: %u, Current HP %u\n", player->BasicEquiped, player->ArmorEquiped, player->HeavyEquiped, player->HP);
 
-	hurt(player, 5);
-
-	gameLocal.Printf("Testy! I did DMG! %u\n", player->HP);
-
+	
 	//gameLocal.Printf("Calling RPG.cpp\n");
 
 	//Machine();
 
+
+	gameLocal.Printf("menu state: %u\n", player->menuState);
+
+
+	if (player->actorSelected != NULL)
+	{
+		gameLocal.Printf("Currently Selected Actor %u\n", player->actorSelectedIndex);
+	}
 
 
 
@@ -1139,6 +1144,8 @@ void idPlayer::setPlayerLoadout(const idCmdArgs& args) //Used to set loadout in 
 
 	gameLocal.Printf("-> %u, %u, %u\n ", player->getBasic(player), player->getArmor(player), player->getHeavy(player));
 
+	
+
 
 
 
@@ -1171,6 +1178,70 @@ const char* MenuState;
 
 void idPlayer::left() {
 
+
+
+	switch (menuState)
+	{
+		//Action state, where the player decides which action they want to take
+		case Action:
+		{
+			prevSelect();
+			switch (playerChoice)
+			{
+
+			case ATTACK:
+				playerChoice = ITEM;
+				gameLocal.Printf("Item\n");
+				//_hud->SetStateInt("player_choice", currentSelection);
+				Selection = "Item";
+				break;
+
+			case DEFEND:
+				playerChoice = ATTACK;
+				gameLocal.Printf("Attack\n");
+				Selection = "Attack";
+				break;
+
+			case ITEM:
+				playerChoice = DEFEND;
+				gameLocal.Printf("Defend\n");
+				Selection = "Defend";
+				break;
+			}
+			currentSelection = playerChoice;
+			break;
+		}
+
+		//Attack state, where player decides to make heavy or basic attack
+		case Attack:
+		{
+			basic = true;
+
+
+			currentSelection = 0;
+			Selection = "Basic";
+			break;
+		}
+
+		//Item state, where player decides which item to use
+		case Item:
+		{
+			
+			prevItem();
+			currentSelection = playerChoice;
+			break;
+		}
+
+		//Target state, where player decides who they wish to target, self included
+		case Target:
+		{
+			prevTarget();
+			break;
+		}
+	}
+
+
+	//OLD CODE SEE IF THIS IS CAUSING ERRORS
 
 	/// <summary>
 	/// TODO Make the follow section ENUM based. No need for several IFs when I could just use a switch/case
@@ -1213,7 +1284,8 @@ void idPlayer::left() {
 	
 	else if (ItemSelect)
 	{
-		switch (playerItem)
+		//prevItem();
+		/*switch (playerItem)
 		{
 		case MedKit:
 			playerItem = BattlePowder;
@@ -1242,23 +1314,18 @@ void idPlayer::left() {
 
 		case BattlePowder:
 			playerItem = Grenade;
+			playerItem = Grenade;
 			gameLocal.Printf("Grenade\n");
 			Selection = "Grenade";
 
 			break;
 		}
-		currentSelection = playerItem;
+		currentSelection = playerItem;*/
 
 		//currentSelection = playerChoice;
 	}
 
 		
-	
-	
-	
-	
-	
-	
 	
 	UpdateHudStats(hud);
 
@@ -1271,6 +1338,72 @@ void idPlayer::left() {
 }
 
 void idPlayer::right() {
+
+
+	switch (menuState)
+	{
+			//Action state, where the player decides which action they want to take
+		case Action:
+		{
+			nextSelect();
+			switch (playerChoice)
+			{
+
+			case ATTACK:
+				playerChoice = ITEM;
+				gameLocal.Printf("Item\n");
+				//_hud->SetStateInt("player_choice", currentSelection);
+				Selection = "Item";
+				break;
+
+			case DEFEND:
+				playerChoice = ATTACK;
+				gameLocal.Printf("Attack\n");
+				Selection = "Attack";
+				break;
+
+			case ITEM:
+				playerChoice = DEFEND;
+				gameLocal.Printf("Defend\n");
+				Selection = "Defend";
+				break;
+			}
+			currentSelection = playerChoice;
+			break;
+		}
+
+		//Attack state, where player decides to make heavy or basic attack
+		case Attack:
+		{
+			basic = false;
+
+
+			currentSelection = 1;
+			Selection = "Heavy";
+			break;
+		}
+
+		//Item state, where player decides which item to use
+		case Item:
+		{
+			gameLocal.Printf("I AM DOING THE NEXT ITEM");
+			nextItem();
+			currentSelection = playerChoice;
+			break;
+		}
+
+		//Target state, where player decides who they wish to target, self included
+		case Target:
+		{
+			nextTarget();
+			break;
+		}
+	}
+
+
+
+
+
 
 	if (ActionSelect)
 	{
@@ -1306,7 +1439,11 @@ void idPlayer::right() {
 	}
 	else if (ItemSelect)
 	{
-		switch (playerItem)
+		//nextItem();
+
+
+
+		/*switch (playerItem)
 		{
 		
 		case MedKit:
@@ -1340,7 +1477,7 @@ void idPlayer::right() {
 
 			break;
 		}
-		currentSelection = playerItem;
+		currentSelection = playerItem;*/
 
 
 	}
@@ -1484,6 +1621,9 @@ void idPlayer::phaseToString(PhaseMachine p, const char* s, idUserInterface *_hu
 	case DEFEAT:
 		s = "battle over_DEFEAT!";
 		break;
+	case TRGT:
+		s = "TARGETING";
+		break;
 
 
 
@@ -1508,119 +1648,157 @@ void idPlayer::phaseToString(PhaseMachine p, const char* s, idUserInterface *_hu
 //These could be written better, BUT THEY WORK FOR NOW
 void idPlayer::nextItem()
 {
+	idPlayer* p = gameLocal.GetLocalPlayer();
+	
+	
+
 	switch (playerItem)
 	{
 	case MedKit:
-		playerItem = PortableCover;
+		p->playerItem = PortableCover;
 		gameLocal.Printf("Portable Cover\n");
 		Selection = "Portable Cover";
 		break;
 
 	case PortableCover:
-		playerItem = ArmorPiercingBullets;
+		p->playerItem = ArmorPiercingBullets;
 		gameLocal.Printf("Armor Piercing Bullets\n");
 		Selection = "Arm Piercing";
 		break;
 
 	case ArmorPiercingBullets:
-		playerItem = Grenade;
+		p->playerItem = Grenade;
 		gameLocal.Printf("Grenade\n");
 		Selection = "Grenade";
 		break;
 
 	case Grenade:
-		playerItem = BattlePowder;
+		p->playerItem = BattlePowder;
 		gameLocal.Printf("Battle Powder\n");
 		Selection = "Battle Powder";
 		break;
 
 	case BattlePowder:
-		playerItem = MedKit;
+		p->playerItem = MedKit;
 		gameLocal.Printf("Medkit\n");
 		Selection = "Medkit";
 
 		break;
+	default:
+		p->playerItem = MedKit;
+		Selection = "Medkit";
+		return;
+
 	}
+
+	//gameLocal.Printf("TRIED NEXT IMTE, &u \n", playerItem);
+	currentSelection = p->playerItem;
 }
 
 void idPlayer::prevItem()
 {
 
+	idPlayer* p = gameLocal.GetLocalPlayer();
+
+	if (p->playerItem == NULL)
+	{
+		p->playerItem = BattlePowder;
+		Selection = "Battle Powder";
+		return;
+	}
+
 	switch (playerItem)
 	{
 	case MedKit:
-		playerItem = BattlePowder;
+		p->playerItem = BattlePowder;
 		gameLocal.Printf("Battle Powder\n");
 		Selection = "Battle Powder";
 		break;
 
 	case PortableCover:
-		playerItem = MedKit;
+		p->playerItem = MedKit;
 		gameLocal.Printf("Medkit\n");
 		Selection = "Medkit";
 
 		break;
 
 	case ArmorPiercingBullets:
-		playerItem = PortableCover;
+		p->playerItem = PortableCover;
 		gameLocal.Printf("Portable Cover\n");
 		Selection = "Portable Cover";
 		break;
 
 	case Grenade:
-		playerItem = ArmorPiercingBullets;
+		p->playerItem = ArmorPiercingBullets;
 		gameLocal.Printf("Armor Piercing Bullets\n");
 		Selection = "Arm Piercing";
 		break;
 
 	case BattlePowder:
-		playerItem = Grenade;
+		p->playerItem = Grenade;
 		gameLocal.Printf("Grenade\n");
 		Selection = "Grenade";
 
 		break;
 	}
-	currentSelection = playerItem;
+	currentSelection = p->playerItem;
 
 
 
 }
 
 
-//NEW Selection Code
-void idPlayer::nextSelect() {}
+
+
+
+
+//NEW Selection Code STILL WORK IN PROGRESS
+void idPlayer::nextSelect() {
+
+	switch (playerChoice)
+	{
+
+	case ATTACK:
+		playerChoice = ITEM;
+		gameLocal.Printf("Item\n");
+		//_hud->SetStateInt("player_choice", currentSelection);
+		Selection = "Item";
+		break;
+
+	case DEFEND:
+		playerChoice = ATTACK;
+		gameLocal.Printf("Attack\n");
+		Selection = "Attack";
+		break;
+
+	case ITEM:
+		playerChoice = DEFEND;
+		gameLocal.Printf("Defend\n");
+		Selection = "Defend";
+		break;
+	}
+	currentSelection = playerChoice;
+}
 
 void idPlayer::prevSelect() {}
 
 //Target Code!
 void idPlayer::nextTarget()
 {
-
+	idPlayer *p = gameLocal.GetLocalPlayer();
 	
-	if (actorSelectedIndex == NULL || actorSelectedIndex <= -1 ){actorSelected = 0;} //Null or negative ints flop to 0
-	else {actorSelectedIndex += 1;} // increases selected index by one
+	if ( actorSelectedIndex < 0 ){actorSelectedIndex = 0;} //Null or negative ints flop to 0
+	else 
+	{
+		actorSelectedIndex += 1; // increases selected index by one
+	}
 
-
+	//Flops greater than 5 to 0 (wrap around)
 	if (actorSelectedIndex > 5)
 	{
 		actorSelectedIndex = 0;
 	}
 
-
-	if (EnemyList == NULL) return;
-	else {
-
-
-		if (EnemyList[actorSelectedIndex] == NULL)
-		{
-			actorSelected = gameLocal.GetLocalPlayer();
-			return;
-		}
-
-		actorSelected = EnemyList[actorSelectedIndex]; //Praying this byte reading stuff doesn't cause an issue
-
-
-	}
 
 
 
@@ -1628,36 +1806,17 @@ void idPlayer::nextTarget()
 
 void idPlayer::prevTarget()
 {
+	idPlayer* p = gameLocal.GetLocalPlayer();
 
-
-	if (actorSelectedIndex == NULL || actorSelectedIndex <= -1) { actorSelectedIndex = 0; } //Null or negative ints flop to 0
+	if (actorSelectedIndex <= -1) { actorSelectedIndex = 6; } //Null or negative ints flop to 0
 	else { actorSelectedIndex -= 1; } // increases selected index by one
 
 
 
 	if (actorSelectedIndex < 0)
 	{
-		actorSelectedIndex = 6;
+		actorSelectedIndex = 5;
 	}
-
-
-
-	if (EnemyList == NULL) return;
-	else {
-
-		
-		if (EnemyList[actorSelectedIndex] == NULL)
-		{
-			actorSelected = gameLocal.GetLocalPlayer();
-			return;
-		}
-
-		actorSelected = EnemyList[actorSelectedIndex]; //Praying this byte reading stuff doesn't cause an issue
-
-
-	}
-
-
 
 
 
@@ -4103,8 +4262,6 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 		MenuState = "Initializing...";
 		
 	}
-
-	//_hud->SetStateString("current_phase", MenuState); //plz no crash
 
 
 

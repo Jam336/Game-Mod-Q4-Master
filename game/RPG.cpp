@@ -394,22 +394,35 @@ void Machine()
 	//handler->InitializeRPGMenu();
 
 
+	idPlayer* player;
+	idActor* enemy;
 
-
-
-
-	idActor* enemy = player->EnemyList[0];
-	idPlayer* player = gameLocal.GetLocalPlayer();
-
-
-
-
-	if (enemy == NULL || player == NULL||!initialized)
+	if (!initialized)
 	{
 		StartFight();
 
-		idActor* enemy = player->EnemyList[0];
-		idPlayer* player = gameLocal.GetLocalPlayer();
+		player = gameLocal.GetLocalPlayer();
+		enemy = player->EnemyList[0];
+		
+		initialized = true;
+	}
+
+
+
+
+	
+	player = gameLocal.GetLocalPlayer();
+	enemy = player->EnemyList[0];
+
+
+
+	if (enemy == NULL || player == NULL || !initialized)
+	{
+		StartFight();
+
+		
+		player = gameLocal.GetLocalPlayer();
+		enemy = player->EnemyList[0];
 		initialized = true;
 	}
 
@@ -468,28 +481,34 @@ void Machine()
 		switch (phase)
 		{
 		case START:
+		{
 			gameLocal.Printf("GLORIOUS COMBAT!\n");
 			//StartFight();
-			
+
 			player->playerPhase = SELECT;
-			
+
 			player->ActionSelect = true;
-			
+
 			gameLocal.Printf("MAKE AN ACTION SELECTION\n");
-			
+
 			//continue;
 			break;
-		case SELECT:
+		}
 			
-
+		case SELECT:
+		{
 			//c = makeChoice(player);
 
-			//TODO, REPLACE THESE IFS WITH PROPER EVENT UI HANDLING
+			
 
-			switch(c)
+			switch (c)
 			{
 			case ATTACK:
 				player->playerPhase = ATK_MENU;
+
+				player->menuState = idPlayer::SelectionState::Attack;
+
+
 				gameLocal.Printf("SELECTED ATTACK! CHOOSE YOUR ATTACK\n");
 				player->ActionSelect = false;
 				player->AttackSelect = true;
@@ -498,11 +517,15 @@ void Machine()
 				player->playerPhase = DEF_MENU;
 				gameLocal.Printf("SELECTED DEFENSE!\n");
 				player->ActionSelect = false;
-				
+
 				break;
 			case ITEM:
 				player->playerPhase = ITM_MENU;
 				gameLocal.Printf("SELECTED ITEMS! CHOOSE YOUR ITEM\n");
+
+				player->menuState = idPlayer::SelectionState::Item;
+
+
 				player->ActionSelect = false;
 				player->ItemSelect = true;
 				break;
@@ -510,7 +533,10 @@ void Machine()
 
 			//continue;
 			break;
+		}
+			
 		case ATK_MENU:
+		{
 			gameLocal.Printf("GLORIOUS ATTACK MENU!\n");
 
 			//TODO SET UP PROPER EVENT HANDLING FOR WEAPON CHOICE
@@ -518,17 +544,34 @@ void Machine()
 
 
 
-			player->playerPhase = ATK_ACT;
+			player->playerPhase = TRGT;
+			player->menuState = idPlayer::SelectionState::Target;
+
+			player->ATKFlag = true;
+
+
+
 			//continue;
 			break;
-		case ATK_ACT:
-			gameLocal.Printf("GLORIOUS ATTACK ACTION\n");
+		}
 			
+		case ATK_ACT:
+		{
+			gameLocal.Printf("GLORIOUS ATTACK ACTION\n");
+
 			if (player->lastUsed == ArmorPiercingBullets && player->itemUsed == false)
 			{
-				
+
 				player->ATK += 5;
 				gameLocal.Printf("Used Armor Piercing Bullets! Increased ATK!\n");
+			}
+
+
+
+
+			if (player->actorSelected != NULL)
+			{
+				enemy = player->actorSelected;
 			}
 
 
@@ -537,20 +580,20 @@ void Machine()
 
 			if (basic)
 			{
-				attack(player, true,enemy);
+				attack(player, true, enemy);
 			}
 			else if (heavy)
 			{
 				//Heavy attacks target all enemies
-				for (idActor *a : player->EnemyList)
+				for (idActor* a : player->EnemyList)
 				{
 					if (a == NULL) continue;
 					attack(player, false, a);
 					gameLocal.Printf("Enemy HP: %u\n", a->HP);
 				}
-				
+
 			}
-			
+
 
 
 			if (player->lastUsed == ArmorPiercingBullets && player->itemUsed == false)
@@ -584,24 +627,30 @@ void Machine()
 			{
 				player->playerPhase = DEF_ACT;
 			}
-			
 
 
-			
+
+
 			//continue;
 			break;
 
+		}
 
 		case DEF_MENU:
+		{
 			gameLocal.Printf("GLORIOUS DEFENSIVE MANEUVER!\n");
 
 			player->playerPhase = DEF_ACT;
 			defended = true;
 			//continue;
 			break;
+		}
 
 		case DEF_ACT:
+		{
 			gameLocal.Printf("GLORIOUS DODGING!\n");
+
+			player->menuState = idPlayer::SelectionState::None;
 
 			//TODO, Add randomness to enemy actions
 
@@ -616,40 +665,27 @@ void Machine()
 				player->itemUsed = true;
 				gameLocal.Printf("Used portable shield! avoided DMG!\n");
 			}
-			else{ 
-				
+			else {
+
 				for (idActor* a : player->EnemyList)
 				{
 					if (a == NULL || a->HP == 0) continue;
-					
+
 
 					//checks if a is a boss, and if so does their special little case
 					if (a->BossCase == 0) attackBasic(a, player);
-					else (special(a, player,a->BossCase));
+					else (special(a, player, a->BossCase));
 
-					
+
 
 				}
-				
-			
+
+
 			}
 
 			//need to loop through the enemy list
 
-			
 
-
-
-
-
-
-
-
-
-
-
-
-			
 
 			if (defended)
 			{
@@ -672,26 +708,30 @@ void Machine()
 			}
 
 
-			
+
 			//continue;
 			break;
 
+		}
+			
 		case ITM_MENU:
-
+		{
 			//I'll have some better code for how targeting works but for now, this is good enough
 
 			gameLocal.Printf("GLORIOUS ITEM MENU!\n");
 
 			//i = NONE;
-			
+
 			player->playerPhase = ITM_USE;
 
+			player->ATKFlag = false;
+
 			break;
-			
+
+		}
 
 		case ITM_USE:
-
-
+		{
 			gameLocal.Printf("GLORIOUS ITEM USE!\n");
 
 			player->itemUsed = false;
@@ -718,12 +758,37 @@ void Machine()
 			player->playerPhase = DEF_ACT;
 
 			break;
+		}
+					
+		case TRGT:
+		{
 
+
+			if (player->actorSelected == NULL)
+			{
+				break;
+			}
 			
 
 
 
+			if (player->ATKFlag) 
+			{
+				player->playerPhase = ATK_ACT;
+			}
+			else
+			{
+				player->playerPhase = ITM_USE;
+			}
+
+
+
+
+			break;
+		}
+
 		case END:
+		{
 			gameLocal.Printf("GLORIOUS END!\n");
 			player->xp += 20;
 			while (xpThresh())
@@ -735,14 +800,17 @@ void Machine()
 
 			return;
 
+		}
+			
 		case DEFEAT:
+		{
 			gameLocal.Printf("EMBARASSING FAILURE\n");
 			initialized = false;
 			player->playerPhase = START;
 			return;
 
-
-
+		}
+			
 		default:
 			return;
 		}

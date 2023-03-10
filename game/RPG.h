@@ -30,7 +30,7 @@ private:
 
 enum Choice { ATTACK, DEFEND, ITEM }; //simple three choices
 
-enum PhaseMachine { START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE, FLEE, DEF_ACT, END, DEFEAT, ATK_TRGT, ITM_TRGT };
+enum PhaseMachine { START, SELECT, ATK_MENU, ATK_ACT, DEF_MENU, ITM_MENU, ITM_USE, FLEE, DEF_ACT, END, DEFEAT, TRGT};
 
 
 
@@ -51,6 +51,9 @@ bool xpThresh();
 void levelUp();
 
 void choiceToString(char* outStr, Choice c);
+
+
+
 
 
 

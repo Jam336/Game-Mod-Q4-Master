@@ -296,9 +296,10 @@ public:
 	item playerItem;
 	bool itemUsed;
 
-	idActor* EnemyList[5];
+	idActor* EnemyList[6];
 
-	idActor* Selected;
+	int actorSelectedIndex;
+	idActor* actorSelected;
 
 
 
@@ -474,6 +475,50 @@ public:
 	void select();
 
 	void back();
+
+	
+	
+	//Functions that will scroll through different selection.
+	//
+
+
+
+
+
+
+	void idPlayer::nextSelect();
+
+	void idPlayer::prevSelect();
+
+
+	void idPlayer::nextItem();
+
+	void idPlayer::prevItem();
+
+	
+	void idPlayer::nextTarget();
+
+	void idPlayer::prevTarget();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	static void idPlayer::GUICall(const idCmdArgs& args);
 

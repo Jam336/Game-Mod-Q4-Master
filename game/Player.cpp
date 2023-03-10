@@ -1171,6 +1171,10 @@ const char* MenuState;
 
 void idPlayer::left() {
 
+
+	/// <summary>
+	/// TODO Make the follow section ENUM based. No need for several IFs when I could just use a switch/case
+	/// </summary>
 	if (ActionSelect)
 	{
 		switch (playerChoice)
@@ -1197,6 +1201,7 @@ void idPlayer::left() {
 		}
 		currentSelection = playerChoice;
 	}
+	
 	else if (AttackSelect)
 	{
 		basic = true;
@@ -1205,6 +1210,7 @@ void idPlayer::left() {
 		currentSelection = 0;
 		Selection = "Basic";
 	}
+	
 	else if (ItemSelect)
 	{
 		switch (playerItem)
@@ -1246,7 +1252,15 @@ void idPlayer::left() {
 		//currentSelection = playerChoice;
 	}
 
-		UpdateHudStats(hud);
+		
+	
+	
+	
+	
+	
+	
+	
+	UpdateHudStats(hud);
 
 
 
@@ -1374,6 +1388,16 @@ void idPlayer::back() {
 
 
 
+
+
+
+
+
+
+
+
+
+
 void idPlayer::phaseToString(PhaseMachine p, const char* s)
 {
 	switch (p)
@@ -1478,6 +1502,180 @@ void idPlayer::phaseToString(PhaseMachine p, const char* s, idUserInterface *_hu
 
 
 
+//Defining functions
+
+
+//These could be written better, BUT THEY WORK FOR NOW
+void idPlayer::nextItem()
+{
+	switch (playerItem)
+	{
+	case MedKit:
+		playerItem = PortableCover;
+		gameLocal.Printf("Portable Cover\n");
+		Selection = "Portable Cover";
+		break;
+
+	case PortableCover:
+		playerItem = ArmorPiercingBullets;
+		gameLocal.Printf("Armor Piercing Bullets\n");
+		Selection = "Arm Piercing";
+		break;
+
+	case ArmorPiercingBullets:
+		playerItem = Grenade;
+		gameLocal.Printf("Grenade\n");
+		Selection = "Grenade";
+		break;
+
+	case Grenade:
+		playerItem = BattlePowder;
+		gameLocal.Printf("Battle Powder\n");
+		Selection = "Battle Powder";
+		break;
+
+	case BattlePowder:
+		playerItem = MedKit;
+		gameLocal.Printf("Medkit\n");
+		Selection = "Medkit";
+
+		break;
+	}
+}
+
+void idPlayer::prevItem()
+{
+
+	switch (playerItem)
+	{
+	case MedKit:
+		playerItem = BattlePowder;
+		gameLocal.Printf("Battle Powder\n");
+		Selection = "Battle Powder";
+		break;
+
+	case PortableCover:
+		playerItem = MedKit;
+		gameLocal.Printf("Medkit\n");
+		Selection = "Medkit";
+
+		break;
+
+	case ArmorPiercingBullets:
+		playerItem = PortableCover;
+		gameLocal.Printf("Portable Cover\n");
+		Selection = "Portable Cover";
+		break;
+
+	case Grenade:
+		playerItem = ArmorPiercingBullets;
+		gameLocal.Printf("Armor Piercing Bullets\n");
+		Selection = "Arm Piercing";
+		break;
+
+	case BattlePowder:
+		playerItem = Grenade;
+		gameLocal.Printf("Grenade\n");
+		Selection = "Grenade";
+
+		break;
+	}
+	currentSelection = playerItem;
+
+
+
+}
+
+
+//NEW Selection Code
+void idPlayer::nextSelect() {}
+
+void idPlayer::prevSelect() {}
+
+//Target Code!
+void idPlayer::nextTarget()
+{
+
+	
+	if (actorSelectedIndex == NULL || actorSelectedIndex <= -1 ){actorSelected = 0;} //Null or negative ints flop to 0
+	else {actorSelectedIndex += 1;} // increases selected index by one
+
+
+	if (actorSelectedIndex > 5)
+	{
+		actorSelectedIndex = 0;
+	}
+
+
+	if (EnemyList == NULL) return;
+	else {
+
+
+		if (EnemyList[actorSelectedIndex] == NULL)
+		{
+			actorSelected = gameLocal.GetLocalPlayer();
+			return;
+		}
+
+		actorSelected = EnemyList[actorSelectedIndex]; //Praying this byte reading stuff doesn't cause an issue
+
+
+	}
+
+
+
+}
+
+void idPlayer::prevTarget()
+{
+
+
+	if (actorSelectedIndex == NULL || actorSelectedIndex <= -1) { actorSelectedIndex = 0; } //Null or negative ints flop to 0
+	else { actorSelectedIndex -= 1; } // increases selected index by one
+
+
+
+	if (actorSelectedIndex < 0)
+	{
+		actorSelectedIndex = 6;
+	}
+
+
+
+	if (EnemyList == NULL) return;
+	else {
+
+		
+		if (EnemyList[actorSelectedIndex] == NULL)
+		{
+			actorSelected = gameLocal.GetLocalPlayer();
+			return;
+		}
+
+		actorSelected = EnemyList[actorSelectedIndex]; //Praying this byte reading stuff doesn't cause an issue
+
+
+	}
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+//
+
+
+
+
+
 
 
 
@@ -1491,6 +1689,16 @@ idPlayer::idPlayer() {
 	memset( &usercmd, 0, sizeof( usercmd ) );
 	
 	//Jade time!!!
+
+
+
+
+
+
+
+
+
+
 
 	BasicEquiped = Blaster;
 	ArmorEquiped = Helmet;

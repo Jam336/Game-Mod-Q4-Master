@@ -340,9 +340,9 @@ void StartFight()
 	
 	
 	phase = START;
-	player->EnemyList [0] = new idActor();
-	player->EnemyList[1] = new idActor();
-	player->EnemyList[2] = new idActor();
+	player->CombatList [0] = new idActor();
+	player->CombatList[1] = new idActor();
+	player->CombatList[2] = new idActor();
 	
 
 	if (EnemyList == NULL || player == NULL)
@@ -351,7 +351,7 @@ void StartFight()
 		return;
 	}
 	
-	for (idActor *a : player->EnemyList)
+	for (idActor *a : player->CombatList)
 	{
 		if (a == NULL)
 		{
@@ -362,6 +362,8 @@ void StartFight()
 		enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
 		enemy->setStats(enemy, 100, 1, 1, 1);
 		enemy->HP = enemy->maxHP;
+
+		player->hud->SetStateInt("enem1hp", enemy->HP);
 
 	}
 	
@@ -402,7 +404,7 @@ void Machine()
 		StartFight();
 
 		player = gameLocal.GetLocalPlayer();
-		enemy = player->EnemyList[0];
+		enemy = player->CombatList[0];
 		
 		initialized = true;
 	}
@@ -412,7 +414,7 @@ void Machine()
 
 	
 	player = gameLocal.GetLocalPlayer();
-	enemy = player->EnemyList[0];
+	enemy = player->CombatList[0];
 
 
 
@@ -422,7 +424,7 @@ void Machine()
 
 		
 		player = gameLocal.GetLocalPlayer();
-		enemy = player->EnemyList[0];
+		enemy = player->CombatList[0];
 		initialized = true;
 	}
 
@@ -489,6 +491,11 @@ void Machine()
 
 			player->ActionSelect = true;
 
+			player->menuState = idPlayer::SelectionState::Action;
+
+
+
+
 			gameLocal.Printf("MAKE AN ACTION SELECTION\n");
 
 			//continue;
@@ -543,6 +550,12 @@ void Machine()
 
 
 
+			if (!player->basic)
+			{
+				player->playerPhase = ATK_ACT;
+				player->menuState = idPlayer::SelectionState::None;
+				break;
+			}
 
 			player->playerPhase = TRGT;
 			player->menuState = idPlayer::SelectionState::Target;
@@ -566,13 +579,22 @@ void Machine()
 				gameLocal.Printf("Used Armor Piercing Bullets! Increased ATK!\n");
 			}
 
+		
 
 
 
 
-			if (player->actorSelected != NULL)
+
+
+			if (player->actorSelectedIndex == NULL)
 			{
-				enemy = player->actorSelected;
+				
+				enemy = player->CombatList[0];
+			}
+			else
+			{
+				enemy = player->CombatList[player->actorSelectedIndex];
+				
 				
 			}
 
@@ -580,15 +602,15 @@ void Machine()
 
 
 
-			if (basic)
+			if (player->basic)
 			{
 				attack(player, true, enemy);
 				gameLocal.Printf("Enemy HP: %u\n", enemy->HP);
 			}
-			else if (heavy)
+			else
 			{
 				//Heavy attacks target all enemies
-				for (idActor* a : player->EnemyList)
+				for (idActor* a : player->CombatList)
 				{
 					if (a == NULL) continue;
 					attack(player, false, a);
@@ -609,7 +631,7 @@ void Machine()
 
 			endFlag = true;
 
-			for (idActor* a : player->EnemyList)
+			for (idActor* a : player->CombatList)
 			{
 				if (a == NULL) continue;
 				if (a->HP > 1) endFlag = false; break;
@@ -670,7 +692,7 @@ void Machine()
 			}
 			else {
 
-				for (idActor* a : player->EnemyList)
+				for (idActor* a : player->CombatList)
 				{
 					if (a == NULL || a->HP == 0) continue;
 

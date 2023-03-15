@@ -1186,28 +1186,7 @@ void idPlayer::left() {
 		case Action:
 		{
 			prevSelect();
-			//switch (playerChoice)
-			//{
 
-			//case ATTACK:
-			//	playerChoice = ITEM;
-			//	gameLocal.Printf("Item\n");
-			//	//_hud->SetStateInt("player_choice", currentSelection);
-			//	Selection = "Item";
-			//	break;
-
-			//case DEFEND:
-			//	playerChoice = ATTACK;
-			//	gameLocal.Printf("Attack\n");
-			//	Selection = "Attack";
-			//	break;
-
-			//case ITEM:
-			//	playerChoice = DEFEND;
-			//	gameLocal.Printf("Defend\n");
-			//	Selection = "Defend";
-			//	break;
-			//}
 			currentSelection = playerChoice;
 			break;
 		}
@@ -1237,95 +1216,10 @@ void idPlayer::left() {
 		{
 			prevTarget();
 			break;
+			
 		}
 	}
 
-
-	//OLD CODE SEE IF THIS IS CAUSING ERRORS
-
-	/// <summary>
-	/// TODO Make the follow section ENUM based. No need for several IFs when I could just use a switch/case
-	/// </summary>
-	//if (ActionSelect)
-	//{
-	//	switch (playerChoice)
-	//	{
-
-	//	case ATTACK:
-	//		playerChoice = ITEM;
-	//		gameLocal.Printf("Item\n");
-	//		//_hud->SetStateInt("player_choice", currentSelection);
-	//		Selection = "Item";
-	//		break;
-
-	//	case DEFEND:
-	//		playerChoice = ATTACK;
-	//		gameLocal.Printf("Attack\n");
-	//		Selection = "Attack";
-	//		break;
-
-	//	case ITEM:
-	//		playerChoice = DEFEND;
-	//		gameLocal.Printf("Defend\n");
-	//		Selection = "Defend";
-	//		break;
-	//	}
-	//	currentSelection = playerChoice;
-	//}
-	//
-	//else if (AttackSelect)
-	//{
-	//	basic = true;
-	//	
-
-	//	currentSelection = 0;
-	//	Selection = "Basic";
-	//}
-	//
-	//else if (ItemSelect)
-	//{
-	//	//prevItem();
-	//	/*switch (playerItem)
-	//	{
-	//	case MedKit:
-	//		playerItem = BattlePowder;
-	//		gameLocal.Printf("Battle Powder\n");
-	//		Selection = "Battle Powder";
-	//		break;
-
-	//	case PortableCover:
-	//		playerItem = MedKit;
-	//		gameLocal.Printf("Medkit\n");
-	//		Selection = "Medkit";
-
-	//		break;
-
-	//	case ArmorPiercingBullets:
-	//		playerItem = PortableCover;
-	//		gameLocal.Printf("Portable Cover\n");
-	//		Selection = "Portable Cover";
-	//		break;
-
-	//	case Grenade:
-	//		playerItem = ArmorPiercingBullets;
-	//		gameLocal.Printf("Armor Piercing Bullets\n");
-	//		Selection = "Arm Piercing";
-	//		break;
-
-	//	case BattlePowder:
-	//		playerItem = Grenade;
-	//		playerItem = Grenade;
-	//		gameLocal.Printf("Grenade\n");
-	//		Selection = "Grenade";
-
-	//		break;
-	//	}
-	//	currentSelection = playerItem;*/
-
-	//	//currentSelection = playerChoice;
-	//}
-
-	//	
 	
 	UpdateHudStats(hud);
 
@@ -1400,88 +1294,9 @@ void idPlayer::right() {
 		}
 	}
 
+	UpdateHudStats(hud);
 
 
-
-
-
-	//if (ActionSelect)
-	//{
-	//	switch (playerChoice)
-	//	{
-	//	case ATTACK:
-	//		playerChoice = DEFEND;
-	//		gameLocal.Printf("Defend\n");
-	//		Selection = "Defend";
-	//		break;
-
-	//	case DEFEND:
-	//		playerChoice = ITEM;
-	//		gameLocal.Printf("Item\n");
-	//		Selection = "Item";
-	//		break;
-
-	//	case ITEM:
-	//		playerChoice = ATTACK;
-	//		gameLocal.Printf("Attack\n");
-	//		Selection = "Attack";
-	//		break;
-	//	}
-	//	currentSelection = playerChoice;
-	//}
-	//else if (AttackSelect)
-	//{
-	//	basic = false;
-
-	//	currentSelection = 1;
-	//	Selection = "Heavy";
-
-	//}
-	//else if (ItemSelect)
-	//{
-	//	//nextItem();
-
-
-
-	//	/*switch (playerItem)
-	//	{
-	//	
-	//	case MedKit:
-	//		playerItem = PortableCover;
-	//		gameLocal.Printf("Portable Cover\n");
-	//		Selection = "Portable Cover";
-	//		break;
-
-	//	case PortableCover:
-	//		playerItem = ArmorPiercingBullets;
-	//		gameLocal.Printf("Armor Piercing Bullets\n");
-	//		Selection = "Arm Piercing";
-	//		break;
-
-	//	case ArmorPiercingBullets:
-	//		playerItem = Grenade;
-	//		gameLocal.Printf("Grenade\n");
-	//		Selection = "Grenade";
-	//		break;
-
-	//	case Grenade:
-	//		playerItem = BattlePowder;
-	//		gameLocal.Printf("Battle Powder\n");
-	//		Selection = "Battle Powder";
-	//		break;
-
-	//	case BattlePowder:
-	//		playerItem = MedKit;
-	//		gameLocal.Printf("Medkit\n");
-	//		Selection = "Medkit";
-
-	//		break;
-	//	}
-	//	currentSelection = playerItem;*/
-
-
-	//}
-	//
 }
 
 void idPlayer::select() {
@@ -1780,7 +1595,33 @@ void idPlayer::nextSelect() {
 	currentSelection = playerChoice;
 }
 
-void idPlayer::prevSelect() {}
+void idPlayer::prevSelect()
+{
+	switch (playerChoice)
+	{
+
+	case ATTACK:
+		playerChoice = ITEM;
+		gameLocal.Printf("Item\n");
+		//_hud->SetStateInt("player_choice", currentSelection);
+		Selection = "Item";
+		break;
+
+	case DEFEND:
+		playerChoice = ATTACK;
+		gameLocal.Printf("Attack\n");
+		Selection = "Attack";
+		break;
+
+	case ITEM:
+		playerChoice = DEFEND;
+		gameLocal.Printf("Defend\n");
+		Selection = "Defend";
+		break;
+	}
+
+
+}
 
 //Target Code!
 void idPlayer::nextTarget()
@@ -1793,12 +1634,15 @@ void idPlayer::nextTarget()
 		actorSelectedIndex += 1; // increases selected index by one
 	}
 
-	//Flops greater than 5 to 0 (wrap around)
-	if (actorSelectedIndex > 5)
+	//Flops greater than 3 to 0 (wrap around)
+	if (actorSelectedIndex > 3)
 	{
 		actorSelectedIndex = 0;
 	}
 
+	
+	
+	UpdateHudStats(hud);
 
 
 
@@ -1808,17 +1652,18 @@ void idPlayer::prevTarget()
 {
 	idPlayer* p = gameLocal.GetLocalPlayer();
 
-	if (actorSelectedIndex <= -1) { actorSelectedIndex = 6; } //Null or negative ints flop to 0
+	if (actorSelectedIndex <= -1) { actorSelectedIndex = 3; } //Null or negative ints flop to 0
 	else { actorSelectedIndex -= 1; } // increases selected index by one
 
 
 
 	if (actorSelectedIndex < 0)
 	{
-		actorSelectedIndex = 5;
+		actorSelectedIndex = 3;
 	}
 
-
+	
+	UpdateHudStats(hud);
 
 
 
@@ -4252,7 +4097,29 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	{
 		Selection = "";
 	}
-	_hud->SetStateString("player_choice", Selection);
+
+	if (playerPhase == TRGT)
+	{
+		_hud->SetStateInt("player_choice", actorSelectedIndex);
+	}
+	else 
+	{
+		_hud->SetStateString("player_choice", Selection);
+	}
+
+
+
+	
+
+	if (CombatList != NULL)
+	{
+		
+		_hud->SetStateInt("enem1hp", CombatList[0]->HP);
+		_hud->SetStateInt("enem2hp", CombatList[1]->HP);
+		_hud->SetStateInt("enem3hp", CombatList[2]->HP);
+	}
+
+
 	
 	
 	phaseToString(playerPhase, MenuState, _hud);

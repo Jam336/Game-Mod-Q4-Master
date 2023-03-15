@@ -569,9 +569,11 @@ void Machine()
 
 
 
+
 			if (player->actorSelected != NULL)
 			{
 				enemy = player->actorSelected;
+				
 			}
 
 
@@ -581,6 +583,7 @@ void Machine()
 			if (basic)
 			{
 				attack(player, true, enemy);
+				gameLocal.Printf("Enemy HP: %u\n", enemy->HP);
 			}
 			else if (heavy)
 			{

@@ -1186,28 +1186,28 @@ void idPlayer::left() {
 		case Action:
 		{
 			prevSelect();
-			switch (playerChoice)
-			{
+			//switch (playerChoice)
+			//{
 
-			case ATTACK:
-				playerChoice = ITEM;
-				gameLocal.Printf("Item\n");
-				//_hud->SetStateInt("player_choice", currentSelection);
-				Selection = "Item";
-				break;
+			//case ATTACK:
+			//	playerChoice = ITEM;
+			//	gameLocal.Printf("Item\n");
+			//	//_hud->SetStateInt("player_choice", currentSelection);
+			//	Selection = "Item";
+			//	break;
 
-			case DEFEND:
-				playerChoice = ATTACK;
-				gameLocal.Printf("Attack\n");
-				Selection = "Attack";
-				break;
+			//case DEFEND:
+			//	playerChoice = ATTACK;
+			//	gameLocal.Printf("Attack\n");
+			//	Selection = "Attack";
+			//	break;
 
-			case ITEM:
-				playerChoice = DEFEND;
-				gameLocal.Printf("Defend\n");
-				Selection = "Defend";
-				break;
-			}
+			//case ITEM:
+			//	playerChoice = DEFEND;
+			//	gameLocal.Printf("Defend\n");
+			//	Selection = "Defend";
+			//	break;
+			//}
 			currentSelection = playerChoice;
 			break;
 		}
@@ -1246,86 +1246,86 @@ void idPlayer::left() {
 	/// <summary>
 	/// TODO Make the follow section ENUM based. No need for several IFs when I could just use a switch/case
 	/// </summary>
-	if (ActionSelect)
-	{
-		switch (playerChoice)
-		{
+	//if (ActionSelect)
+	//{
+	//	switch (playerChoice)
+	//	{
 
-		case ATTACK:
-			playerChoice = ITEM;
-			gameLocal.Printf("Item\n");
-			//_hud->SetStateInt("player_choice", currentSelection);
-			Selection = "Item";
-			break;
+	//	case ATTACK:
+	//		playerChoice = ITEM;
+	//		gameLocal.Printf("Item\n");
+	//		//_hud->SetStateInt("player_choice", currentSelection);
+	//		Selection = "Item";
+	//		break;
 
-		case DEFEND:
-			playerChoice = ATTACK;
-			gameLocal.Printf("Attack\n");
-			Selection = "Attack";
-			break;
+	//	case DEFEND:
+	//		playerChoice = ATTACK;
+	//		gameLocal.Printf("Attack\n");
+	//		Selection = "Attack";
+	//		break;
 
-		case ITEM:
-			playerChoice = DEFEND;
-			gameLocal.Printf("Defend\n");
-			Selection = "Defend";
-			break;
-		}
-		currentSelection = playerChoice;
-	}
-	
-	else if (AttackSelect)
-	{
-		basic = true;
-		
+	//	case ITEM:
+	//		playerChoice = DEFEND;
+	//		gameLocal.Printf("Defend\n");
+	//		Selection = "Defend";
+	//		break;
+	//	}
+	//	currentSelection = playerChoice;
+	//}
+	//
+	//else if (AttackSelect)
+	//{
+	//	basic = true;
+	//	
 
-		currentSelection = 0;
-		Selection = "Basic";
-	}
-	
-	else if (ItemSelect)
-	{
-		//prevItem();
-		/*switch (playerItem)
-		{
-		case MedKit:
-			playerItem = BattlePowder;
-			gameLocal.Printf("Battle Powder\n");
-			Selection = "Battle Powder";
-			break;
+	//	currentSelection = 0;
+	//	Selection = "Basic";
+	//}
+	//
+	//else if (ItemSelect)
+	//{
+	//	//prevItem();
+	//	/*switch (playerItem)
+	//	{
+	//	case MedKit:
+	//		playerItem = BattlePowder;
+	//		gameLocal.Printf("Battle Powder\n");
+	//		Selection = "Battle Powder";
+	//		break;
 
-		case PortableCover:
-			playerItem = MedKit;
-			gameLocal.Printf("Medkit\n");
-			Selection = "Medkit";
+	//	case PortableCover:
+	//		playerItem = MedKit;
+	//		gameLocal.Printf("Medkit\n");
+	//		Selection = "Medkit";
 
-			break;
+	//		break;
 
-		case ArmorPiercingBullets:
-			playerItem = PortableCover;
-			gameLocal.Printf("Portable Cover\n");
-			Selection = "Portable Cover";
-			break;
+	//	case ArmorPiercingBullets:
+	//		playerItem = PortableCover;
+	//		gameLocal.Printf("Portable Cover\n");
+	//		Selection = "Portable Cover";
+	//		break;
 
-		case Grenade:
-			playerItem = ArmorPiercingBullets;
-			gameLocal.Printf("Armor Piercing Bullets\n");
-			Selection = "Arm Piercing";
-			break;
+	//	case Grenade:
+	//		playerItem = ArmorPiercingBullets;
+	//		gameLocal.Printf("Armor Piercing Bullets\n");
+	//		Selection = "Arm Piercing";
+	//		break;
 
-		case BattlePowder:
-			playerItem = Grenade;
-			playerItem = Grenade;
-			gameLocal.Printf("Grenade\n");
-			Selection = "Grenade";
+	//	case BattlePowder:
+	//		playerItem = Grenade;
+	//		playerItem = Grenade;
+	//		gameLocal.Printf("Grenade\n");
+	//		Selection = "Grenade";
 
-			break;
-		}
-		currentSelection = playerItem;*/
+	//		break;
+	//	}
+	//	currentSelection = playerItem;*/
 
-		//currentSelection = playerChoice;
-	}
+	//	//currentSelection = playerChoice;
+	//}
 
-		
+	//	
 	
 	UpdateHudStats(hud);
 
@@ -1346,28 +1346,28 @@ void idPlayer::right() {
 		case Action:
 		{
 			nextSelect();
-			switch (playerChoice)
-			{
+			//switch (playerChoice)
+			//{
 
-			case ATTACK:
-				playerChoice = ITEM;
-				gameLocal.Printf("Item\n");
-				//_hud->SetStateInt("player_choice", currentSelection);
-				Selection = "Item";
-				break;
+			//case ATTACK:
+			//	playerChoice = ITEM;
+			//	gameLocal.Printf("Item\n");
+			//	//_hud->SetStateInt("player_choice", currentSelection);
+			//	Selection = "Item";
+			//	break;
 
-			case DEFEND:
-				playerChoice = ATTACK;
-				gameLocal.Printf("Attack\n");
-				Selection = "Attack";
-				break;
+			//case DEFEND:
+			//	playerChoice = ATTACK;
+			//	gameLocal.Printf("Attack\n");
+			//	Selection = "Attack";
+			//	break;
 
-			case ITEM:
-				playerChoice = DEFEND;
-				gameLocal.Printf("Defend\n");
-				Selection = "Defend";
-				break;
-			}
+			//case ITEM:
+			//	playerChoice = DEFEND;
+			//	gameLocal.Printf("Defend\n");
+			//	Selection = "Defend";
+			//	break;
+			//}
 			currentSelection = playerChoice;
 			break;
 		}
@@ -1405,83 +1405,83 @@ void idPlayer::right() {
 
 
 
-	if (ActionSelect)
-	{
-		switch (playerChoice)
-		{
-		case ATTACK:
-			playerChoice = DEFEND;
-			gameLocal.Printf("Defend\n");
-			Selection = "Defend";
-			break;
+	//if (ActionSelect)
+	//{
+	//	switch (playerChoice)
+	//	{
+	//	case ATTACK:
+	//		playerChoice = DEFEND;
+	//		gameLocal.Printf("Defend\n");
+	//		Selection = "Defend";
+	//		break;
 
-		case DEFEND:
-			playerChoice = ITEM;
-			gameLocal.Printf("Item\n");
-			Selection = "Item";
-			break;
+	//	case DEFEND:
+	//		playerChoice = ITEM;
+	//		gameLocal.Printf("Item\n");
+	//		Selection = "Item";
+	//		break;
 
-		case ITEM:
-			playerChoice = ATTACK;
-			gameLocal.Printf("Attack\n");
-			Selection = "Attack";
-			break;
-		}
-		currentSelection = playerChoice;
-	}
-	else if (AttackSelect)
-	{
-		basic = false;
+	//	case ITEM:
+	//		playerChoice = ATTACK;
+	//		gameLocal.Printf("Attack\n");
+	//		Selection = "Attack";
+	//		break;
+	//	}
+	//	currentSelection = playerChoice;
+	//}
+	//else if (AttackSelect)
+	//{
+	//	basic = false;
 
-		currentSelection = 1;
-		Selection = "Heavy";
+	//	currentSelection = 1;
+	//	Selection = "Heavy";
 
-	}
-	else if (ItemSelect)
-	{
-		//nextItem();
-
-
-
-		/*switch (playerItem)
-		{
-		
-		case MedKit:
-			playerItem = PortableCover;
-			gameLocal.Printf("Portable Cover\n");
-			Selection = "Portable Cover";
-			break;
-
-		case PortableCover:
-			playerItem = ArmorPiercingBullets;
-			gameLocal.Printf("Armor Piercing Bullets\n");
-			Selection = "Arm Piercing";
-			break;
-
-		case ArmorPiercingBullets:
-			playerItem = Grenade;
-			gameLocal.Printf("Grenade\n");
-			Selection = "Grenade";
-			break;
-
-		case Grenade:
-			playerItem = BattlePowder;
-			gameLocal.Printf("Battle Powder\n");
-			Selection = "Battle Powder";
-			break;
-
-		case BattlePowder:
-			playerItem = MedKit;
-			gameLocal.Printf("Medkit\n");
-			Selection = "Medkit";
-
-			break;
-		}
-		currentSelection = playerItem;*/
+	//}
+	//else if (ItemSelect)
+	//{
+	//	//nextItem();
 
 
-	}
-	
+
+	//	/*switch (playerItem)
+	//	{
+	//	
+	//	case MedKit:
+	//		playerItem = PortableCover;
+	//		gameLocal.Printf("Portable Cover\n");
+	//		Selection = "Portable Cover";
+	//		break;
+
+	//	case PortableCover:
+	//		playerItem = ArmorPiercingBullets;
+	//		gameLocal.Printf("Armor Piercing Bullets\n");
+	//		Selection = "Arm Piercing";
+	//		break;
+
+	//	case ArmorPiercingBullets:
+	//		playerItem = Grenade;
+	//		gameLocal.Printf("Grenade\n");
+	//		Selection = "Grenade";
+	//		break;
+
+	//	case Grenade:
+	//		playerItem = BattlePowder;
+	//		gameLocal.Printf("Battle Powder\n");
+	//		Selection = "Battle Powder";
+	//		break;
+
+	//	case BattlePowder:
+	//		playerItem = MedKit;
+	//		gameLocal.Printf("Medkit\n");
+	//		Selection = "Medkit";
+
+	//		break;
+	//	}
+	//	currentSelection = playerItem;*/
+
+
+	//}
+	//
 }
 
 void idPlayer::select() {

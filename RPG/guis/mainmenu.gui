@@ -5311,6 +5311,15 @@ windowDef Desktop
 				}
 			}
 
+			windowDef help_menu
+			{
+				rect	12,299,225,100
+				visible	1
+				forecolor	1,1,1,0.8
+				text	"Welcome to the RPG Mod! To interact with menus, Please use the Left and Right arrow keys to change selections, and the Z and X keys to confirm or go back"
+				textscale	0.23
+				font	"fonts/marine"
+			}
 			windowDef t_settings_title
 			{
 				rect	39,19,314,16

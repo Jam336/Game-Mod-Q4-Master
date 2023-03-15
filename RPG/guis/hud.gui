@@ -2137,10 +2137,74 @@ windowDef Desktop
 	}
 	windowDef PlayerRPGCHOICE
 	{
-		rect	341,419,1000,100
+		rect	4,373,350,50
 		visible	1
 		forecolor	1,1,1,1
 		text	"gui::player_choice"
+		textscale	0.5
+		font	"fonts/lowpixel"
+	}
+	windowDef Phase
+	{
+		Menu	{
+		rect	400,375,200,100
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::current_phase"
+		textscale	0.4
+	}
+	windowDef Enemy1Name
+	{
+		rect	-5,11,200,100
+		visible	1
+		forecolor	1,1,1,1
+		text	"Enemy 1"
 		textscale	1
+		textalign	1
+		windowDef Enemy1HP
+		{
+			rect	-7,42,200,100
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::enem1hp"
+			textscale	1
+			textalign	1
+		}
+	}
+	windowDef Enemy2Name
+	{
+		rect	210,12,200,100
+		visible	1
+		forecolor	1,1,1,1
+		text	"Enemy 2"
+		textscale	1
+		textalign	1
+		windowDef Enemy2HP
+		{
+			rect	0,45,200,100
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::enem2hp"
+			textscale	1
+			textalign	1
+		}
+	}
+	windowDef Enem3Name
+	{
+		rect	433,13,200,100
+		visible	1
+		forecolor	1,1,1,1
+		text	"Enemy 3"
+		textscale	1
+		textalign	1
+		windowDef Enemy3HP
+		{
+			rect	0,47,200,100
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::enem3hp"
+			textscale	1
+			textalign	1
+		}
 	}
 }

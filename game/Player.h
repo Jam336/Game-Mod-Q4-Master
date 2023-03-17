@@ -476,6 +476,8 @@ public:
 
 	static void idPlayer::MachineCall(const idCmdArgs& args);
 
+	static void idPlayer::bossFight(const idCmdArgs& args);
+
 	void left();
 
 	void right();

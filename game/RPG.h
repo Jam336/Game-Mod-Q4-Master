@@ -64,7 +64,7 @@ void choiceToString(char* outStr, Choice c);
 
 
 
-void StartFight();
+void StartFight(int startCase);
 
 void Machine();
 

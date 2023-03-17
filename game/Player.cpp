@@ -1168,6 +1168,25 @@ void idPlayer::MachineCall(const idCmdArgs& args)
 
 
 
+void idPlayer::bossFight(const idCmdArgs& args)
+{
+
+	int b = atoi(args.Argv(1));
+
+	gameLocal.Printf("BOSS FIGHT %u", b);
+
+	StartFight(b);
+
+
+
+
+
+}
+
+
+
+
+
 bool basic;
 int currentSelection = 0;
 //playerItem = MedKit;
@@ -1574,23 +1593,25 @@ void idPlayer::nextSelect() {
 	{
 
 	case ATTACK:
-		playerChoice = ITEM;
-		gameLocal.Printf("Item\n");
-		//_hud->SetStateInt("player_choice", currentSelection);
-		Selection = "Item";
-		break;
-
-	case DEFEND:
-		playerChoice = ATTACK;
-		gameLocal.Printf("Attack\n");
-		Selection = "Attack";
-		break;
-
-	case ITEM:
 		playerChoice = DEFEND;
 		gameLocal.Printf("Defend\n");
 		Selection = "Defend";
 		break;
+
+
+	case DEFEND:
+		playerChoice = ITEM;
+		gameLocal.Printf("Item\n");
+		Selection = "Item";
+		break;
+
+
+	case ITEM:
+		playerChoice = ATTACK;
+		gameLocal.Printf("Attack\n");
+		Selection = "Attack";
+		break;
+		
 	}
 	currentSelection = playerChoice;
 }
@@ -1674,7 +1695,6 @@ void idPlayer::prevTarget()
 
 
 
-//
 
 
 

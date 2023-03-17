@@ -22,25 +22,6 @@ RPG::RPG()
 
 }
 
-void RPG::InitializeRPGMenu()
-{
-	RPGMenu = uiManager->FindGui("guis/mphud.gui", true, false, true);
-
-	if (RPGMenu == NULL)
-	{
-		gameLocal.Printf("GUI NULL!!!!\n");
-		return;
-	}
-
-	//RPGMenu->SetStateBool("gameDraw", true);
-
-
-
-	RPGMenu->Activate(true, gameLocal.time);
-	gameLocal.Printf("Attempted GUI find and launch\n");
-
-}
-
 
 
 
@@ -72,7 +53,13 @@ void hurt(idActor* A, int dmg)
 	{
 		curr -= dmg;
 	}
+	
+	
+	if (curr > A->maxHP) curr = A->maxHP;
 	A->HP = curr; //pls no die
+
+	
+	
 	
 
 }
@@ -201,12 +188,60 @@ void attackHeavy(idActor* attacker, idActor* defender)
 
 
 //We'll probably be determining things on a case by case basis, which will make me want to die <3
-void special(idActor* attacker, idActor* defender, int Case)
+void special(idActor* attacker, idPlayer* defender, int Case)
 {
 	if (attacker == 0 || defender == 0)
 	{
 		return;
 	}
+
+	//Our attacker should always be the boss so we can just do attacker->case
+
+	item it;
+	switch (attacker->BossCase) //A 0 is nothing, so we don't need a case for it
+	{
+	case 1: //Item user
+		it = defender->lastUsed;
+
+		if (it == NONE) it = Grenade; //If the player HASNT used and item, they default to a grenade
+
+		useItem(it, attacker, defender);
+		break;
+
+
+	case 2: //Ally Healer
+		
+		for (int i = 0; i < 3; i++)
+		{
+			hurt(defender->CombatList[i], -10);
+		}
+
+		break;
+
+	case 3: //NECROMANCER, if an ally is at 0 hp, they 'revive them' and have them attack twice!
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (defender->CombatList[i]->HP == 0)
+			{
+				attackBasic(defender->CombatList[i], defender);
+				attackBasic(defender->CombatList[i], defender);
+			}
+
+
+
+
+
+		}
+		
+
+
+
+
+		break;
+
+	}
+	
 
 
 
@@ -264,38 +299,6 @@ void levelUp()
 
 
 
-
-Choice makeChoice(idPlayer* player) //DEPRECATED
-{
-
-	if (player == NULL)
-	{
-		gameLocal.Printf("NULL POINTERS, EXITING CHOICE\n");
-		return ATTACK;
-	}
-
-	player->inSelection = true;
-	if(player->playerChoice == NULL)
-	{
-		player->playerChoice = ATTACK;
-	}
-	
-
-
-
-
-
-
-	return ATTACK;
-
-
-
-
-
-}
-
-
-
 char atkStr[10] = "Attack";
 char dfdStr[10] = "Defend";
 char itmStr[10] = "Item";
@@ -330,12 +333,12 @@ void choiceToString(char* outStr, Choice c) //DEPRECATED
 
 
 
-void StartFight()
+void StartFight(int startCase = 0)
 {
 
-	
+	//Time to make this case based!!!
 
-	gameLocal.Printf("STARTING FIGHT\n");
+	gameLocal.Printf("STARTING FIGHT CASE: %u\n", startCase);
 	player = gameLocal.GetLocalPlayer();
 	
 	
@@ -351,22 +354,70 @@ void StartFight()
 		return;
 	}
 	
-	for (idActor *a : player->CombatList)
+
+	//Regardless, we should keep our constructor like this
+	for (int i = 0 ; i <3 ; i++)
 	{
+
+		idActor* a = player->CombatList[i]; //Ayy, no issues now!
+
 		if (a == NULL)
 		{
 			//gameLocal.Printf("NULL POINTERS, EXITING COMBAT");
 			continue;
 		}
+
+		//we should only worry about the 2nd position in the list, as to keep them centered
+
 		idActor* enemy = a;
 		enemy->setLoadout(enemy, Enemy, Helmet, Rocket);
 		enemy->setStats(enemy, 100, 1, 1, 1);
 		enemy->HP = enemy->maxHP;
 
+
+		if (i == 1 && startCase != 0)
+		{
+			a->BossCase = startCase;
+			switch (startCase)
+			{
+
+			case 1: //Item user
+
+				a->setStats(a, 400, 1, 1, 1);
+				
+				break;
+
+			case 2: //Healer
+
+				a->setStats(a, 200, 1, 1, 1);
+				break;
+
+
+			case 3: //No clue yet
+
+				a->setStats(a, 200, 1, 1, 1);
+				break;
+
+
+
+
+
+
+			}
+
+			a->HP = a->maxHP;
+		}
+
+
+
+
 		player->hud->SetStateInt("enem1hp", enemy->HP);
 
 	}
 	
+
+
+
 
 
 	//Setting enemy and player HP to their max at the start of combat
@@ -581,11 +632,6 @@ void Machine()
 
 		
 
-
-
-
-
-
 			if (player->actorSelectedIndex == NULL)
 			{
 				
@@ -593,9 +639,13 @@ void Machine()
 			}
 			else
 			{
-				enemy = player->CombatList[player->actorSelectedIndex];
-				
-				
+				if (player->actorSelectedIndex == 3)
+				{
+					enemy = player;
+				}
+				else {
+					enemy = player->CombatList[player->actorSelectedIndex];
+				}
 			}
 
 
@@ -634,7 +684,13 @@ void Machine()
 			for (idActor* a : player->CombatList)
 			{
 				if (a == NULL) continue;
-				if (a->HP > 1) endFlag = false; break;
+
+
+				if (a->HP > 1)
+				{
+					endFlag = false; 
+					break;
+				}
 			}
 
 
@@ -749,6 +805,10 @@ void Machine()
 
 			player->playerPhase = ITM_USE;
 
+			player->playerPhase = TRGT;
+			player->menuState = idPlayer::SelectionState::Target;
+			
+
 			player->ATKFlag = false;
 
 			break;
@@ -763,6 +823,8 @@ void Machine()
 
 			i = player->playerItem;
 
+
+			//Deprecated code
 			if (i == Grenade)
 			{
 				target = enemy;
@@ -771,6 +833,23 @@ void Machine()
 			{
 				target = player;
 			}
+
+			if (player->actorSelectedIndex != 0)
+			{
+				if (player->actorSelectedIndex == 3)
+				{
+					target = player;
+				}
+				else {
+					target = player->CombatList[player->actorSelectedIndex];
+				}
+			}
+			else
+			{
+				target = player->CombatList[0];
+			}
+
+
 
 
 

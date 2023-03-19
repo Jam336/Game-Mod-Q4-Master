@@ -1735,9 +1735,9 @@ idPlayer::idPlayer() {
 	maxHP = 100;
 	HP = 100;
 
-	ATK = 5;
-	DEF = 10;
-	SPD = 15;
+	ATK = 2;
+	DEF = 2;
+	SPD = 5;
 
 	xp = 100;
 

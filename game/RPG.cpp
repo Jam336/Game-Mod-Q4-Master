@@ -148,11 +148,11 @@ void attackBasic(idActor* attacker, idActor* defender)
 
 	//for now, we'll pretend STATS don't exist and simply apply DMG based upon the weapon index+1 - armor index
 
-	int weapon = attacker->BasicEquiped;
+	wep weapon = attacker->BasicEquiped;
 
 	int armor = defender->ArmorEquiped;
 
-	int dmg = ((weapon + 1) * attacker->ATK) - (armor * defender->DEF); //We'll have a bit more complex dmg equation later
+	int dmg = ((calcDmg(weapon)) * attacker->ATK) - (armor * defender->DEF); //We'll have a bit more complex dmg equation later
 
 	if (dmg >= 1) //only run hurt() if we'll actually be dealing dmg
 	{
@@ -171,11 +171,11 @@ void attackHeavy(idActor* attacker, idActor* defender)
 	}
 	//for now, we'll pretend STATS don't exist and simply apply DMG based upon the weapon (index+1)*5 - armor index+1*2
 
-	int weapon = attacker->BasicEquiped;
+	wep weapon = attacker->BasicEquiped;
 
 	int armor = defender->ArmorEquiped;
 
-	int dmg = ((weapon + 1) * attacker->ATK)*5  - ((armor)*defender->DEF)*2; //We'll have a bit more complex dmg equation later
+	int dmg = ((calcDmg(weapon)) * attacker->ATK)  - ((armor)*defender->DEF)*2; //We'll have a bit more complex dmg equation later
 
 	if (dmg >= 1) //only run hurt() if we'll actually be dealing dmg
 	{
@@ -286,9 +286,9 @@ void levelUp()
 	}
 
 	player->xp -= 100;
-	player->ATK +=5;
-	player->DEF +=5;
-	player->SPD +=5;
+	player->ATK +=2;
+	player->DEF +=2;
+	player->SPD +=2;
 	player->maxHP += 25;
 
 	gameLocal.Printf("Leveled Up!\n");
@@ -355,6 +355,9 @@ void StartFight(int startCase = 0)
 	}
 	
 
+	player->lastUsed = NONE;
+
+
 	//Regardless, we should keep our constructor like this
 	for (int i = 0 ; i <3 ; i++)
 	{
@@ -377,6 +380,12 @@ void StartFight(int startCase = 0)
 
 		if (i == 1 && startCase != 0)
 		{
+
+
+
+
+
+
 			a->BossCase = startCase;
 			switch (startCase)
 			{
@@ -393,7 +402,7 @@ void StartFight(int startCase = 0)
 				break;
 
 
-			case 3: //No clue yet
+			case 3: //NECROMANCER
 
 				a->setStats(a, 200, 1, 1, 1);
 				break;
@@ -745,6 +754,19 @@ void Machine()
 
 				player->itemUsed = true;
 				gameLocal.Printf("Used portable shield! avoided DMG!\n");
+
+				for (idActor* a : player->CombatList)
+				{
+
+					if (a == NULL || a->HP == 0) continue;
+					if (a->BossCase == 0);
+					else (special(a, player, a->BossCase));
+
+
+
+				}
+
+
 			}
 			else {
 
@@ -754,6 +776,9 @@ void Machine()
 
 
 					//checks if a is a boss, and if so does their special little case
+
+
+
 					if (a->BossCase == 0) attackBasic(a, player);
 					else (special(a, player, a->BossCase));
 

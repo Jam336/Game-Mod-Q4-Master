@@ -10,52 +10,57 @@
 
 int calcDmg(wep w)
 {
+    int outVal = 2;
 
 
+    if (isHeavy(w))
+    {
+        outVal = 1;
+    }
 
     switch (w)
     {
     case Blaster:
-        return(blaster());
+        return(outVal*blaster());
         break;
 
     case Machine_Gun:
-        return(machineGun());
+        return(outVal * machineGun());
         break;
 
     case Shotgun:
-        return(shotGun());
+        return(outVal * shotGun());
         break;
 
     case Nail_Gun:
-        return(nailGun());
+        return(outVal * nailGun());
         break;
 
     case Gauntlet:
-        return(gauntlet());
+        return(outVal * gauntlet());
         break;
 
     case Rocket:
-        return(rocket());
+        return(outVal * rocket());
         break;
 
     case Mistake:
-        return(mistake());
+        return(outVal * mistake());
         break;
 
     case Dark:
-        return(dark());
+        return(outVal * dark());
         break;
 
     case Rail:
-        return(rail());
+        return(outVal * rail());
         break;
 
     case Lightning:
-        return(lightning());
+        return(outVal * lightning());
         break;
     case Enemy:
-        return 20;
+        return 10;
         break;
 
     }
@@ -123,52 +128,52 @@ item intToItem(int i)
 
 int blaster()
 {
-    return 1;
+    return 5;
 }
 
 int machineGun()
 {
-    return 2;
+    return 10;
 }
 
 int shotGun()
 {
-    return 2;
+    return 15;
 }
 
 int nailGun()
 {
-    return 1;
+    return 15;
 }
 
 int gauntlet()
 {
-    return 5;
+    return 20;
 }
 
 int rocket()
 {
-    return 5;
+    return 2;
 }
 
 int mistake()
 {
-    return 10;
+    return 3;
 }
 
 int dark()
 {
-    return 10;
+    return 4;
 }
 
 int rail()
 {
-    return 10;
+    return 5;
 }
 
 int lightning()
 {
-    return 15;
+    return 6;
 }
 
 int helmet()

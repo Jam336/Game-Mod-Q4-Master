@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Steam\steamapps\common\Quake 4\Quake4.exe" +set fs_game RPG +set com_allowconsole 1
